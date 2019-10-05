@@ -1,0 +1,31 @@
+{
+  "name": "colortool",
+  "version": "1.0.0",
+  "description": "Color management tool",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aloso/colortool.git"
+  },
+  "keywords": [
+    "color",
+    "css"
+  ],
+  "author": "Ludwig Stecher <ludwig.stecher@gmx.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aloso/colortool/issues"
+  },
+  "homepage": "https://github.com/Aloso/colortool#readme",
+  "module": "app",
+  "dependencies": {},
+  "devDependencies": {
+    "ts-loader": "^6.0.4",
+    "typescript": "^3.6.2",
+    "webpack": "^4.38.0",
+    "webpack-cli": "^3.3.8"
+  }
+}
