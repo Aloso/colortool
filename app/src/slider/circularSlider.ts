@@ -4,13 +4,13 @@ import { Canvas } from '../canvas/canvas'
 export interface Slider2dOptions {
 }
 
-export class CircularSlider {
+export class CircularSlider<S extends {} | void> {
     public readonly events = new EventEmitter<number>()
 
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
 
-    constructor(private canvas: Canvas, options: Slider2dOptions) {
+    constructor(private canvas: Canvas<S>, options: Slider2dOptions) {
         this.initElement()
         this.makeValueVisible()
     }

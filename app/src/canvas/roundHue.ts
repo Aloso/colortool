@@ -34,8 +34,8 @@ function drawImageLazily(data: Uint8ClampedArray, size: number, padding: number)
 /**
  * Draws a round hue gradient on a canvas.
  */
-export function roundHueGradient(padding: number): RenderFunction {
-    return (canvas: Canvas) => {
+export function roundHueGradient(padding: number): RenderFunction<void> {
+    return (canvas: Canvas<void>) => {
         const w = canvas.elem.width
         const h = canvas.elem.height
         if (w !== h) throw new Error(`Canvas isn't square: ${w}x${h}`)

@@ -25,14 +25,14 @@ const greenValues = ['#f00', '#ff0']
 const blueValues = ['#f00', '#f0f']
 
 
-const circularCanvas = new Canvas(300, 300, roundHueGradient(15))
+const circularCanvas = new Canvas<void>(300, 300, roundHueGradient(15), undefined)
 const circularSlider = new CircularSlider(circularCanvas, {})
 document.body.appendChild(circularSlider.elem)
 
 document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
-const hueCanvas = new Canvas(300, 30, linearGradient(hueValues))
+const hueCanvas = new Canvas(300, 30, linearGradient(), hueValues)
 const hueSlider = new LinearSlider(hueCanvas, {
     min: 0,
     max: 359.9,
@@ -47,7 +47,7 @@ document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
 
-const satCanvas = new Canvas(300, 30, linearGradient(satValues))
+const satCanvas = new Canvas(300, 30, linearGradient(), satValues)
 const satSlider = new LinearSlider(satCanvas, {
     min: 0,
     max: 100,
@@ -59,7 +59,7 @@ document.body.appendChild(satSlider.elem)
 document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
-const lumCanvas = new Canvas(300, 30, linearGradient(lumValues))
+const lumCanvas = new Canvas(300, 30, linearGradient(), lumValues)
 const lumSlider = new LinearSlider(lumCanvas, {
     min: 0,
     max: 100,
@@ -71,7 +71,7 @@ document.body.appendChild(lumSlider.elem)
 document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
-const redCanvas = new Canvas(300, 30, linearGradient(redValues))
+const redCanvas = new Canvas(300, 30, linearGradient(), redValues)
 const redSlider = new LinearSlider(redCanvas, {
     min: 0,
     max: 255,
@@ -83,7 +83,7 @@ document.body.appendChild(redSlider.elem)
 document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
-const greenCanvas = new Canvas(300, 30, linearGradient(greenValues))
+const greenCanvas = new Canvas(300, 30, linearGradient(), greenValues)
 const greenSlider = new LinearSlider(greenCanvas, {
     min: 0,
     max: 255,
@@ -95,7 +95,7 @@ document.body.appendChild(greenSlider.elem)
 document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
-const blueCanvas = new Canvas(300, 30, linearGradient(blueValues))
+const blueCanvas = new Canvas(300, 30, linearGradient(), blueValues)
 const blueSlider = new LinearSlider(blueCanvas, {
     min: 0,
     max: 255,
@@ -172,50 +172,50 @@ function rgbString(rgb: [number, number, number]): string {
 }
 
 function updateHue() {
-    hueSlider.setLinearGradient(hueValues.map((_, i) => rgbString(hslToRgb(  i * 60, sat, lum))))
+    hueSlider.canvas.state = hueValues.map((_, i) => rgbString(hslToRgb(  i * 60, sat, lum)))
     hueSlider.value = hue
 }
 
 function updateSat() {
-    satSlider.setLinearGradient([
+    satSlider.canvas.state = [
         rgbString(hslToRgb(hue, 0, lum)),
         rgbString(hslToRgb(hue, 100, lum)),
-    ])
+    ]
     satSlider.value = sat
 }
 
 function updateLum(canvasOnly = false) {
-    lumSlider.setLinearGradient(['#000', rgbString(hslToRgb(hue, sat, 50)), '#fff'])
+    lumSlider.canvas.state = ['#000', rgbString(hslToRgb(hue, sat, 50)), '#fff']
 
     if (!canvasOnly) lumSlider.value = lum
 }
 
 function updateRed(canvasOnly = false) {
     const [r, g, b] = hslToRgb(hue, sat, lum)
-    redSlider.setLinearGradient([
+    redSlider.canvas.state = [
         rgbString([0, g, b]),
         rgbString([255, g, b]),
-    ])
+    ]
 
     if (!canvasOnly) redSlider.value = r
 }
 
 function updateGreen(canvasOnly = false) {
     const [r, g, b] = hslToRgb(hue, sat, lum)
-    greenSlider.setLinearGradient([
+    greenSlider.canvas.state = [
         rgbString([r, 0, b]),
         rgbString([r, 255, b]),
-    ])
+    ]
 
     if (!canvasOnly) greenSlider.value = g
 }
 
 function updateBlue(canvasOnly = false) {
     const [r, g, b] = hslToRgb(hue, sat, lum)
-    blueSlider.setLinearGradient([
+    blueSlider.canvas.state = [
         rgbString([r, g, 0]),
         rgbString([r, g, 255]),
-    ])
+    ]
 
     if (!canvasOnly) blueSlider.value = b
 }

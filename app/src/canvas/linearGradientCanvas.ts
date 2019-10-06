@@ -1,8 +1,8 @@
 import { RenderFunction } from './canvas'
 import { Direction } from '../util/direction'
 
-export function linearGradient(colorStops: string[], direction: Direction = Direction.Right): RenderFunction {
-    return canvas => new Promise<void>(resolve => {
+export function linearGradient(direction: Direction = Direction.Right): RenderFunction<string[]> {
+    return (canvas, colorStops: string[]) => new Promise<void>(resolve => {
         const w = canvas.elem.width
         const h = canvas.elem.height
 

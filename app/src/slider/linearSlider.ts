@@ -1,7 +1,6 @@
 import { EventEmitter } from '../util/eventEmitter'
 import { Canvas } from '../canvas/canvas'
 import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/direction'
-import { linearGradient } from '../canvas/linearGradientCanvas'
 
 export interface SliderOptions {
     min: number,
@@ -13,7 +12,7 @@ export interface SliderOptions {
     direction?: Direction,
 }
 
-export class LinearSlider {
+export class LinearSlider<S extends {} | void> {
     private _min: number
     private _max: number
     private _value: number
@@ -29,7 +28,7 @@ export class LinearSlider {
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
 
-    constructor(private canvas: Canvas, options: SliderOptions) {
+    constructor(public readonly canvas: Canvas<S>, options: SliderOptions) {
         if (options.min > options.max) {
             throw new Error(`min (${options.min}) is bigger than max (${options.max})`)
         }
@@ -98,11 +97,6 @@ export class LinearSlider {
         this.value = this._min + v * (this._max - this._min)
     }
 
-    public setLinearGradient(gradientColors: string[]) {
-        this.canvas.renderer = linearGradient(gradientColors)
-        this.canvas.redraw()
-    }
-
     private initElement() {
         const dir = this.isVertical ? 'v' : 'h'
 
@@ -138,7 +132,7 @@ export class LinearSlider {
             }
             isKeydown = true
         })
-        this.handle.addEventListener('keyup', e => {
+        this.handle.addEventListener('keyup', () => {
             isKeydown = false
         })
 
