@@ -1,4 +1,4 @@
-import { Color} from './color'
+import { Color } from './color'
 import { RgbColor } from './rgbColor'
 
 export class HslColor implements Color<HslColor> {

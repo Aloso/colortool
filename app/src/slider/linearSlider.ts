@@ -1,3 +1,4 @@
+import { NotNull } from '../util/myTypes'
 import { EventEmitter } from '../util/eventEmitter'
 import { Canvas } from '../canvas/canvas'
 import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/direction'
@@ -12,7 +13,7 @@ export interface SliderOptions {
     direction?: Direction,
 }
 
-export class LinearSlider<S extends {} | void> {
+export class LinearSlider<S extends NotNull> {
     private _value: number
 
     private readonly min: number
@@ -23,7 +24,8 @@ export class LinearSlider<S extends {} | void> {
     private readonly direction: Direction
     private readonly isVertical: boolean
 
-    public readonly events = new EventEmitter<number>()
+    public readonly change = new EventEmitter<number>()
+    public readonly input = new EventEmitter<number>()
 
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
@@ -63,7 +65,7 @@ export class LinearSlider<S extends {} | void> {
         v = this.rounding(v)
         if (v !== this._value) {
             this._value = v
-            this.events.emit('change', v)
+            this.change.emit(v)
             this.makeValueVisible()
         }
     }
@@ -95,7 +97,7 @@ export class LinearSlider<S extends {} | void> {
         this.elem.addEventListener('mousedown', e => {
             if (e.button === 0) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
-                this.events.emit('input', this._value)
+                this.input.emit(this._value)
                 isPressed = true
                 setTimeout(() => this.handle.focus())
             }
@@ -109,7 +111,7 @@ export class LinearSlider<S extends {} | void> {
                 const sign = getSignForSliderKeypress(pressed, this.direction)
 
                 this.value += sign * val
-                this.events.emit('input', this._value)
+                this.input.emit(this._value)
 
                 e.preventDefault()
             }
@@ -122,7 +124,7 @@ export class LinearSlider<S extends {} | void> {
         window.addEventListener('mousemove', e => {
             if (isPressed) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
-                this.events.emit('input', this._value)
+                this.input.emit(this._value)
             }
         })
         window.addEventListener('mouseup', () => isPressed = false)

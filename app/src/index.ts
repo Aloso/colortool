@@ -72,25 +72,25 @@ document.body.appendChild(document.createTextNode(' '))
 let rgb = new RgbColor(255, 0, 0)
 let hsl = rgb.hsl
 
-hueSlider.events.on('input', v => {
+hueSlider.input.on(v => {
     hsl = hsl.setHue(v)
     rgb = hsl.rgb
     updateSliders()
 })
 
-satSlider.events.on('input', v => {
+satSlider.input.on(v => {
     hsl = hsl.setSat(v)
     rgb = hsl.rgb
     updateSliders()
 })
 
-lumSlider.events.on('input', v => {
+lumSlider.input.on(v => {
     hsl = hsl.setLum(v)
     rgb = hsl.rgb
     updateSliders()
 })
 
-redSlider.events.on('input', v => {
+redSlider.input.on(v => {
     const old = hsl
     rgb = rgb.setR(v)
     hsl = rgb.hsl
@@ -100,7 +100,7 @@ redSlider.events.on('input', v => {
     updateSliders()
 })
 
-greenSlider.events.on('input', v => {
+greenSlider.input.on(v => {
     const old = hsl
     rgb = rgb.setG(v)
     hsl = rgb.hsl
@@ -110,7 +110,7 @@ greenSlider.events.on('input', v => {
     updateSliders()
 })
 
-blueSlider.events.on('input', v => {
+blueSlider.input.on(v => {
     const old = hsl
     rgb = rgb.setB(v)
     hsl = rgb.hsl
@@ -120,7 +120,7 @@ blueSlider.events.on('input', v => {
     updateSliders()
 })
 
-alphaSlider.events.on('input', v => {
+alphaSlider.input.on(v => {
     rgb = rgb.setA(v)
     hsl = hsl.setA(v)
 })
