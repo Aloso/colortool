@@ -13,10 +13,10 @@ export interface SliderOptions {
 }
 
 export class LinearSlider<S extends {} | void> {
-    private _min: number
-    private _max: number
     private _value: number
 
+    private readonly min: number
+    private readonly max: number
     private readonly rounding: (n: number) => number
     private readonly step: number
     private readonly smallStep: number
@@ -33,8 +33,8 @@ export class LinearSlider<S extends {} | void> {
             throw new Error(`min (${options.min}) is bigger than max (${options.max})`)
         }
 
-        this._min = options.min
-        this._max = options.max
+        this.min = options.min
+        this.max = options.max
         if (options.initial == null) options.initial = options.min
 
         if (options.initial < options.min || options.initial > options.max) {
@@ -54,32 +54,12 @@ export class LinearSlider<S extends {} | void> {
         this.makeValueVisible()
     }
 
-    public get min(): number {
-        return this._min
-    }
-
-    public get max(): number {
-        return this._max
-    }
-
-    public set min(min: number) {
-        if (min > this._max) min = this._max
-        if (this._value < min) this.value = min
-        this._min = min
-    }
-
-    public set max(max: number) {
-        if (max < this._min) max = this._min
-        if (this._value > max) this.value = max
-        this._max = max
-    }
-
     public get value(): number {
         return this._value
     }
 
     public set value(v: number) {
-        v = Math.max(this._min, Math.min(this._max, v))
+        v = Math.max(this.min, Math.min(this.max, v))
         v = this.rounding(v)
         if (v !== this._value) {
             this._value = v
@@ -89,12 +69,12 @@ export class LinearSlider<S extends {} | void> {
     }
 
     public get valueRelative(): number {
-        return (this._value - this._min) / (this._max - this._min)
+        return (this._value - this.min) / (this.max - this.min)
     }
 
     public set valueRelative(v: number) {
         v = Math.max(0, Math.min(1, v))
-        this.value = this._min + v * (this._max - this._min)
+        this.value = this.min + v * (this.max - this.min)
     }
 
     private initElement() {
@@ -115,6 +95,7 @@ export class LinearSlider<S extends {} | void> {
         this.elem.addEventListener('mousedown', e => {
             if (e.button === 0) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
+                this.events.emit('input', this._value)
                 isPressed = true
                 setTimeout(() => this.handle.focus())
             }
@@ -126,7 +107,9 @@ export class LinearSlider<S extends {} | void> {
             if (pressed != null) {
                 const val = isKeydown ? this.step : this.smallStep
                 const sign = getSignForSliderKeypress(pressed, this.direction)
+
                 this.value += sign * val
+                this.events.emit('input', this._value)
 
                 e.preventDefault()
             }
@@ -139,6 +122,7 @@ export class LinearSlider<S extends {} | void> {
         window.addEventListener('mousemove', e => {
             if (isPressed) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
+                this.events.emit('input', this._value)
             }
         })
         window.addEventListener('mouseup', () => isPressed = false)

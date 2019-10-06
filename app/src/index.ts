@@ -106,27 +106,27 @@ document.body.appendChild(blueSlider.elem)
 
 
 
-hueSlider.events.on('change', v => {
+hueSlider.events.on('input', v => {
     hue = v
     updateSat()
-    updateLum(true)
+    updateLum()
 
     updateRed()
     updateGreen()
     updateBlue()
 })
 
-satSlider.events.on('change', v => {
+satSlider.events.on('input', v => {
     sat = v
     updateHue()
-    updateLum(true)
+    updateLum()
 
     updateRed()
     updateGreen()
     updateBlue()
 })
 
-lumSlider.events.on('change', v => {
+lumSlider.events.on('input', v => {
     lum = v
     updateHue()
     updateSat()
@@ -136,34 +136,34 @@ lumSlider.events.on('change', v => {
     updateBlue()
 })
 
-redSlider.events.on('change', v => {
+redSlider.events.on('input', v => {
     [hue, sat, lum] = rgbToHsl(v, greenSlider.value, blueSlider.value)
-    //updateHue()
-    //updateSat()
-    //updateLum()
+    updateHue()
+    updateSat()
+    updateLum()
 
-    updateGreen(true)
-    updateBlue(true)
+    updateGreen()
+    updateBlue()
 })
 
-greenSlider.events.on('change', v => {
+greenSlider.events.on('input', v => {
     [hue, sat, lum] = rgbToHsl(redSlider.value, v, blueSlider.value)
-    //updateHue()
-    //updateSat()
-    //updateLum()
+    updateHue()
+    updateSat()
+    updateLum()
 
-    updateRed(true)
-    updateBlue(true)
+    updateRed()
+    updateBlue()
 })
 
-blueSlider.events.on('change', v => {
+blueSlider.events.on('input', v => {
     [hue, sat, lum] = rgbToHsl(redSlider.value, greenSlider.value, v)
-    //updateHue()
-    //updateSat()
-    //updateLum()
+    updateHue()
+    updateSat()
+    updateLum()
 
-    updateRed(true)
-    updateGreen(true)
+    updateRed()
+    updateGreen()
 })
 
 
@@ -184,38 +184,38 @@ function updateSat() {
     satSlider.value = sat
 }
 
-function updateLum(canvasOnly = false) {
+function updateLum() {
     lumSlider.canvas.state = ['#000', rgbString(hslToRgb(hue, sat, 50)), '#fff']
 
-    if (!canvasOnly) lumSlider.value = lum
+    lumSlider.value = lum
 }
 
-function updateRed(canvasOnly = false) {
+function updateRed() {
     const [r, g, b] = hslToRgb(hue, sat, lum)
     redSlider.canvas.state = [
         rgbString([0, g, b]),
         rgbString([255, g, b]),
     ]
 
-    if (!canvasOnly) redSlider.value = r
+    redSlider.value = r
 }
 
-function updateGreen(canvasOnly = false) {
+function updateGreen() {
     const [r, g, b] = hslToRgb(hue, sat, lum)
     greenSlider.canvas.state = [
         rgbString([r, 0, b]),
         rgbString([r, 255, b]),
     ]
 
-    if (!canvasOnly) greenSlider.value = g
+    greenSlider.value = g
 }
 
-function updateBlue(canvasOnly = false) {
+function updateBlue() {
     const [r, g, b] = hslToRgb(hue, sat, lum)
     blueSlider.canvas.state = [
         rgbString([r, g, 0]),
         rgbString([r, g, 255]),
     ]
 
-    if (!canvasOnly) blueSlider.value = b
+    blueSlider.value = b
 }
