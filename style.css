@@ -1,3 +1,108 @@
-* {
-    color: red;
+body {
+    margin: 0;
+    padding: 20px;
+}
+
+button::-moz-focus-inner {
+    border: 0;
+}
+
+/************* SLIDER *************/
+
+.slider {
+    box-sizing: border-box;
+    display: inline-flex;
+    width: 30px;
+    height: 30px;
+    padding: 15px;
+}
+
+.h-slider {
+    width: 300px;
+}
+
+.v-slider {
+    height: 300px;
+}
+
+.c-slider {
+    width: 300px;
+    height: 300px;
+}
+
+/************* SLIDER CANVAS *************/
+
+.slider canvas {
+    box-sizing: border-box;
+    margin: -15px;
+    position: absolute;
+    box-shadow: 0 0 3px #0004;
+}
+
+.h-slider canvas,
+.v-slider canvas {
+    border-radius: 1000px;
+}
+
+.c-slider canvas {
+    border-radius: 50%;
+}
+
+/************* SLIDER INNER *************/
+
+.slider-inner {
+    box-sizing: border-box;
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.h-slider-inner {
+    margin: -10px 0;
+}
+
+.v-slider-inner {
+    margin: 0 -10px;
+}
+
+/************* SLIDER HANDLE *************/
+
+.slider-handle {
+    box-sizing: border-box;
+    display: block;
+    border: 1px solid #000a;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 20px #fffa;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    transition:  border .15s;
+}
+
+.h-slider-handle {
+    margin: 0 -10px;
+}
+
+.v-slider-handle {
+    margin: -10px 0;
+}
+
+.c-slider-handle {
+    margin: -10px;
+}
+
+/************* SLIDER FOCUS/HOVER *************/
+
+.slider:hover .slider-handle {
+    box-shadow: inset 0 0 0 20px #fffd;
+}
+
+.slider .slider-handle:focus {
+    border: 3px solid #0006;
+    outline: none;
 }
