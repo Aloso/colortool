@@ -54,7 +54,7 @@ document.body.appendChild(satSlider.elem)
 document.body.appendChild(document.createElement('br'))
 document.body.appendChild(document.createElement('br'))
 
-const lumValues = ['#fff', '#f00', '#000']
+const lumValues = ['#000', '#f00', '#fff']
 
 const lumCanvas = new Canvas(300, 30, linearGradient(lumValues))
 const lumSlider = new LinearSlider(lumCanvas, {
@@ -68,33 +68,47 @@ document.body.appendChild(lumSlider.elem)
 hueSlider.events.on('change', v => {
     hue = v
 
-    const sat0 = hslToRgb(hue, 0, lum)
-    const sat1 = hslToRgb(hue, 100, lum)
-    satValues[0] = `rgb(${sat0[0]}, ${sat0[1]}, ${sat0[2]})`
-    satValues[1] = `rgb(${sat1[0]}, ${sat1[1]}, ${sat1[2]})`
-
-    const lum1 = hslToRgb(hue, sat, 50)
-    lumValues[1] = `rgb(${lum1[0]}, ${lum1[1]}, ${lum1[2]})`
-
-    lumCanvas.redraw()
+    satValues[0] = rgbString(hslToRgb(hue, 0, lum))
+    satValues[1] = rgbString(hslToRgb(hue, 100, lum))
     satCanvas.redraw()
+
+    lumValues[1] = rgbString(hslToRgb(hue, sat, 50))
+    lumCanvas.redraw()
 })
 
 satSlider.events.on('change', v => {
     sat = v
 
-    const lum1 = hslToRgb(hue, sat, 50)
-    lumValues[1] = `rgb(${lum1[0]}, ${lum1[1]}, ${lum1[2]})`
+    hues[0] = rgbString(hslToRgb(  0, sat, lum))
+    hues[1] = rgbString(hslToRgb( 60, sat, lum))
+    hues[2] = rgbString(hslToRgb(120, sat, lum))
+    hues[3] = rgbString(hslToRgb(180, sat, lum))
+    hues[4] = rgbString(hslToRgb(240, sat, lum))
+    hues[5] = rgbString(hslToRgb(300, sat, lum))
+    hues[6] = hues[0]
+    hueCanvas.redraw()
+
+    lumValues[1] = rgbString(hslToRgb(hue, sat, 50))
     lumCanvas.redraw()
 })
 
 lumSlider.events.on('change', v => {
     lum = v
 
-    const sat0 = hslToRgb(hue, 0, lum)
-    const sat1 = hslToRgb(hue, 100, lum)
-    satValues[0] = `rgb(${sat0[0]}, ${sat0[1]}, ${sat0[2]})`
-    satValues[1] = `rgb(${sat1[0]}, ${sat1[1]}, ${sat1[2]})`
+    hues[0] = rgbString(hslToRgb(  0, sat, lum))
+    hues[1] = rgbString(hslToRgb( 60, sat, lum))
+    hues[2] = rgbString(hslToRgb(120, sat, lum))
+    hues[3] = rgbString(hslToRgb(180, sat, lum))
+    hues[4] = rgbString(hslToRgb(240, sat, lum))
+    hues[5] = rgbString(hslToRgb(300, sat, lum))
+    hues[6] = hues[0]
+    hueCanvas.redraw()
 
+    satValues[0] = rgbString(hslToRgb(hue, 0, lum))
+    satValues[1] = rgbString(hslToRgb(hue, 100, lum))
     satCanvas.redraw()
 })
+
+function rgbString(rgb: [number, number, number]): string {
+    return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+}
