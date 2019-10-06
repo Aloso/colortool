@@ -37,19 +37,6 @@ export function hsToRgb(h: number, s: number): [number, number, number] {
     return [r, g, b]
 }
 
-/**
- * red, green and blue are values between [0, 255]
- */
-export function rgbToHex(red: number, green: number, blue: number): string {
-    let rn = red.toString(16);
-    if (rn.length == 1) rn = `0${rn}`;
-    let gn = green.toString(16);
-    if (gn.length == 1) gn = `0${gn}`;
-    let bn = blue.toString(16);
-    if (bn.length == 1) bn = `0${bn}`;
-    return `#${rn}${gn}${bn}`;
-}
-
 export function hslToRgb(h: number, s: number, l:number): [number, number, number] {
     if (h < 0) h = 0
     if (h >= 360) h = 359

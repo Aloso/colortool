@@ -1,4 +1,4 @@
-import { EventEmitter } from './eventEmitter'
+import { EventEmitter } from '../util/eventEmitter'
 
 export type RenderFunction = (canvas: Canvas) => Promise<void>
 

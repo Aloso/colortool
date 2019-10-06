@@ -1,7 +1,7 @@
-import { EventEmitter } from './eventEmitter'
-import { Canvas } from './canvas'
-import { MouseButton } from './event'
-import { Direction, getSignForSliderKeypress, keyToDirection } from './direction'
+import { EventEmitter } from '../util/eventEmitter'
+import { Canvas } from '../canvas/canvas'
+import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/direction'
+import { linearGradient } from '../canvas/linearGradientCanvas'
 
 export interface SliderOptions {
     min: number,
@@ -98,6 +98,11 @@ export class LinearSlider {
         this.value = this._min + v * (this._max - this._min)
     }
 
+    public setLinearGradient(gradientColors: string[]) {
+        this.canvas.renderer = linearGradient(gradientColors)
+        this.canvas.redraw()
+    }
+
     private initElement() {
         const dir = this.isVertical ? 'v' : 'h'
 
@@ -114,7 +119,7 @@ export class LinearSlider {
         let isPressed = false
 
         this.elem.addEventListener('mousedown', e => {
-            if (e.button === MouseButton.Left) {
+            if (e.button === 0) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
                 isPressed = true
                 setTimeout(() => this.handle.focus())

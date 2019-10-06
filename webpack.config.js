@@ -6,7 +6,7 @@ const devtool = isProduction ? false : 'inline-source-map';
 
 module.exports = [
     {
-        entry: './app/index.ts',
+        entry: './app/src/index.ts',
         target: 'web',
         mode,
         devtool,

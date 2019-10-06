@@ -1,5 +1,5 @@
 import { Canvas, RenderFunction } from './canvas'
-import { hsToRgb } from './color'
+import { hsToRgb } from '../color/convertColor'
 
 function drawImageLazily(data: Uint8ClampedArray, size: number, padding: number) {
     let radius = size / 2 - padding

@@ -1,6 +1,5 @@
-import { EventEmitter } from './eventEmitter'
-import { Canvas } from './canvas'
-import { MouseButton } from './event'
+import { EventEmitter } from '../util/eventEmitter'
+import { Canvas } from '../canvas/canvas'
 
 export interface Slider2dOptions {
 }
@@ -30,7 +29,7 @@ export class CircularSlider {
 
     private makeValueVisible() {
         //TODO
-        this.handle.style.left = `50%`
-        this.handle.style.top = `100%`
+        this.handle.style.left = `100%`
+        this.handle.style.top = `50%`
     }
 }

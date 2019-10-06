@@ -36,7 +36,7 @@ button::-moz-focus-inner {
     box-sizing: border-box;
     margin: -15px;
     position: absolute;
-    box-shadow: 0 0 3px #0004;
+    box-shadow: 0 0 3px #0005;
 }
 
 .h-slider canvas,
@@ -73,7 +73,7 @@ button::-moz-focus-inner {
 .slider-handle {
     box-sizing: border-box;
     display: block;
-    border: 1px solid #000a;
+    border: 1px solid #0009;
     background-color: transparent;
     box-shadow: inset 0 0 0 20px #fffa;
     position: relative;

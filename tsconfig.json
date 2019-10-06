@@ -17,5 +17,7 @@
   "awesomeTypescriptLoaderOptions": {
     "useCache": true
   },
-  "include": ["app/index.ts"]
+  "include": [
+    "app/src/index.ts"
+  ]
 }
