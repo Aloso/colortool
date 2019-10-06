@@ -62,8 +62,6 @@ export class Canvas<S extends {} | void> {
 
         this.elem.width = Math.round(w / dpr)
         this.elem.height = Math.round(h / dpr)
-        this.elem.style.width = `${w}px`
-        this.elem.style.height = `${h}px`
     }
 
     public get state(): S {
