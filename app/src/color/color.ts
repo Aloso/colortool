@@ -1,11 +1,13 @@
 import { HslColor } from './hslColor'
 import { RgbColor } from './rgbColor'
 
-export interface Color {
+export interface Color<T extends Color<T>> {
     readonly a: number
-    setA(a: number): Color
+    setA(a: number): T
 
-    toRgb(): RgbColor
-    toHsl(): HslColor
+    rgb: RgbColor
+    hsl: HslColor
+    hex: string
+    hexWithAlpha: string
 }
 
