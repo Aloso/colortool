@@ -8,7 +8,7 @@ import { Direction } from './util/direction'
 import { PaletteCell } from './paletteCell';
 import { HslColor } from './color/hslColor';
 import { Color } from './color/color'
-import { TinyNumberInput } from './slider/tinyNumberInput'
+import { SliderWithInput } from './slider/sliderWithInput'
 
 const space = (width: number = 5) => {
     const el = document.createElement('div')
@@ -37,11 +37,16 @@ const slider100Options: SliderOptions = {
     step: 1,
 }
 
-function upSliderCanvas(name: string): Canvas<string[]> {
-    return new Canvas(30, 338, linearGradient(Direction.Up), ['transparent', 'transparent'], name)
+function upSliderCanvas(): Canvas<string[]> {
+    return new Canvas(30, 298, linearGradient(Direction.Up), ['transparent', 'transparent'])
 }
 
-const circularCanvas = new Canvas(338, 338, roundHueGradient(15), undefined, 'hueCircle')
+function upSliderInput(label: string, options: SliderOptions): SliderWithInput<string[]> {
+    const slider = new LinearSlider(upSliderCanvas(), options)
+    return new SliderWithInput(slider, label)
+}
+
+const circularCanvas = new Canvas(338, 338, roundHueGradient(15), undefined)
 const circularSlider = new CircularSlider(circularCanvas, {
     min: 0,
     max: 100,
@@ -53,40 +58,25 @@ const circularSlider = new CircularSlider(circularCanvas, {
     startAngle: 0,
 })
 
+const hueInput = upSliderInput('H', slider359Options)
+const satInput = upSliderInput('S', slider100Options)
+const lumInput = upSliderInput('L', slider100Options)
+const redInput = upSliderInput('R', slider255Options)
+const greenInput = upSliderInput('G', slider255Options)
+const blueInput = upSliderInput('B', slider255Options)
+const alphaInput = upSliderInput('A', slider100Options)
+
 const $content = document.getElementById('content') as HTMLElement
-$content.appendChild(circularSlider.elem)
-$content.appendChild(space(15))
-
-const hueSlider = new LinearSlider(upSliderCanvas('hue'), slider359Options)
-$content.appendChild(hueSlider.elem)
-$content.appendChild(space())
-
-
-const satSlider = new LinearSlider(upSliderCanvas('sat'), slider100Options)
-$content.appendChild(satSlider.elem)
-$content.appendChild(space())
-
-const lumSlider = new LinearSlider(upSliderCanvas('lum'), slider100Options)
-$content.appendChild(lumSlider.elem)
-$content.appendChild(space(15))
-
-const redSlider = new LinearSlider(upSliderCanvas('red'), slider255Options)
-$content.appendChild(redSlider.elem)
-$content.appendChild(space())
-
-const greenSlider = new LinearSlider(upSliderCanvas('green'), slider255Options)
-$content.appendChild(greenSlider.elem)
-$content.appendChild(space())
-
-const blueSlider = new LinearSlider(upSliderCanvas('blue'), slider255Options)
-$content.appendChild(blueSlider.elem)
-$content.appendChild(space(15))
-
-const alphaSlider = new LinearSlider(upSliderCanvas('alpha'), slider100Options)
-$content.appendChild(alphaSlider.elem)
-$content.appendChild(space(15))
-
-
+$content.append(
+    circularSlider.elem, space(15),
+    hueInput.elem, space(),
+    satInput.elem, space(),
+    lumInput.elem, space(15),
+    redInput.elem, space(),
+    greenInput.elem, space(),
+    blueInput.elem, space(15),
+    alphaInput.elem, space(15),
+)
 
 
 let rgb = new RgbColor(255, 0, 0)
@@ -132,28 +122,28 @@ circularSlider.input.on(({ inner, outer }) => {
     updateLivePalette()
 })
 
-hueSlider.input.on(v => {
+hueInput.input.on(v => {
     hsl = hsl.setHue(v)
     rgb = hsl.rgb
     updateSliders()
     updateLivePalette()
 })
 
-satSlider.input.on(v => {
+satInput.input.on(v => {
     hsl = hsl.setSat(v)
     rgb = hsl.rgb
     updateSliders()
     updateLivePalette()
 })
 
-lumSlider.input.on(v => {
+lumInput.input.on(v => {
     hsl = hsl.setLum(v)
     rgb = hsl.rgb
     updateSliders()
     updateLivePalette()
 })
 
-redSlider.input.on(v => {
+redInput.input.on(v => {
     const old = hsl
     rgb = rgb.setR(v)
     hsl = rgb.hsl
@@ -164,7 +154,7 @@ redSlider.input.on(v => {
     updateLivePalette()
 })
 
-greenSlider.input.on(v => {
+greenInput.input.on(v => {
     const old = hsl
     rgb = rgb.setG(v)
     hsl = rgb.hsl
@@ -175,7 +165,7 @@ greenSlider.input.on(v => {
     updateLivePalette()
 })
 
-blueSlider.input.on(v => {
+blueInput.input.on(v => {
     const old = hsl
     rgb = rgb.setB(v)
     hsl = rgb.hsl
@@ -186,7 +176,7 @@ blueSlider.input.on(v => {
     updateLivePalette()
 })
 
-alphaSlider.input.on(v => {
+alphaInput.input.on(v => {
     rgb = rgb.setA(v)
     hsl = hsl.setA(v)
     updateLivePalette()
@@ -197,22 +187,22 @@ const hueIndices = [0, 1, 2, 3, 4, 5, 6]
 function updateSliders() {
     const n1 = performance.now()
 
-    hueSlider.canvas.state = hueIndices.map(i => hsl.setHue(i * 60).hex)
-    satSlider.canvas.state = [hsl.setSat(0).hex, hsl.setSat(100).hex]
-    lumSlider.canvas.state = ['#000', hsl.setLum(50).hex, '#fff']
+    hueInput.canvasState = hueIndices.map(i => hsl.setHue(i * 60).hex)
+    satInput.canvasState = [hsl.setSat(0).hex, hsl.setSat(100).hex]
+    lumInput.canvasState = ['#000', hsl.setLum(50).hex, '#fff']
 
-    redSlider.canvas.state = [rgb.setR(0).hex, rgb.setR(255).hex]
-    greenSlider.canvas.state = [rgb.setG(0).hex, rgb.setG(255).hex]
-    blueSlider.canvas.state = [rgb.setB(0).hex, rgb.setB(255).hex]
-    alphaSlider.canvas.state = [rgb.setA(0).rgbaString, rgb.setA(100).rgbaString]
+    redInput.canvasState = [rgb.setR(0).hex, rgb.setR(255).hex]
+    greenInput.canvasState = [rgb.setG(0).hex, rgb.setG(255).hex]
+    blueInput.canvasState = [rgb.setB(0).hex, rgb.setB(255).hex]
+    alphaInput.canvasState = [rgb.setA(0).rgbaString, rgb.setA(100).rgbaString]
 
-    hueSlider.value = hsl.hue
-    satSlider.value = hsl.sat
-    lumSlider.value = hsl.lum
-    redSlider.value = rgb.r
-    greenSlider.value = rgb.g
-    blueSlider.value = rgb.b
-    alphaSlider.value = rgb.a
+    hueInput.value = hsl.hue
+    satInput.value = hsl.sat
+    lumInput.value = hsl.lum
+    redInput.value = rgb.r
+    greenInput.value = rgb.g
+    blueInput.value = rgb.b
+    alphaInput.value = rgb.a
     circularSlider.value = { inner: hsl.sat, outer: hsl.hue }
 
     const n4 = performance.now()
@@ -224,12 +214,3 @@ function updateLivePalette() {
 }
 
 updateSliders()
-
-const tiny = new TinyNumberInput(20, 0, 359)
-tiny.change.on(v => console.log('change', v))
-tiny.input.on(v => console.log('input', v))
-
-const tinyOuter = document.createElement('div')
-tinyOuter.setAttribute('style', 'display: inline-flex; width: 30px; height: 22px')
-tinyOuter.append(tiny.elem)
-document.body.append(tinyOuter)

@@ -26,7 +26,6 @@ export class Canvas<S extends NotNull> {
         private _height: number,
         public renderer: RenderFunction<S>,
         state: S,
-        public name: string,
     ) {
         this._state = state
 

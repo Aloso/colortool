@@ -3,8 +3,9 @@ import { LinearSlider } from './linearSlider'
 import { TinyNumberInput } from './tinyNumberInput'
 import { EventEmitter } from '../util/eventEmitter'
 
-class SliderWithInput<S extends NotNull> {
-    private val: number
+export class SliderWithInput<S extends NotNull> {
+    private valInput: number | null = null
+    private valChange: number | null = null
 
     private readonly number: TinyNumberInput
 
@@ -15,12 +16,18 @@ class SliderWithInput<S extends NotNull> {
     public readonly change = new EventEmitter<number>()
 
     constructor(public readonly slider: LinearSlider<S>, label: string) {
-        this.val = slider.value
-
         this.number = new TinyNumberInput(slider.value, slider.min, slider.max)
 
         this.initLabel(label)
         this.initElement()
+    }
+
+    public set value(v: number) {
+        this.slider.value = v
+    }
+
+    public set canvasState(s: S) {
+        this.slider.canvas.state = s
     }
 
     private initLabel(l: string) {
@@ -30,8 +37,8 @@ class SliderWithInput<S extends NotNull> {
 
     private initElement() {
         const inputListener = (v: number) => {
-            if (v !== this.val) {
-                this.val = v
+            if (v !== this.valInput) {
+                this.valInput = v
                 this.slider.value = v
                 this.number.value = v
                 this.input.emit(v)
@@ -39,8 +46,8 @@ class SliderWithInput<S extends NotNull> {
         }
 
         const changeListener = (v: number) => {
-            if (v !== this.val) {
-                this.val = v
+            if (v !== this.valChange) {
+                this.valChange = v
                 this.slider.value = v
                 this.number.value = v
                 this.change.emit(v)
@@ -52,6 +59,7 @@ class SliderWithInput<S extends NotNull> {
         this.slider.change.on(changeListener)
         this.number.change.on(changeListener)
 
+        this.elem.className = `slider-outer ${this.slider.isVertical ? 'v' : 'h'}-slider-outer`
         this.elem.append(this.label, this.slider.elem, this.number.elem)
     }
 

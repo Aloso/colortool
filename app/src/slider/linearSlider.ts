@@ -52,7 +52,7 @@ export class LinearSlider<S extends NotNull> {
 
     public set value(v: number) {
         if (this.val.set(this.rounding(v))) {
-            this.change.emit(v)
+            this.change.emit(this.val.get())
             this.makeValueVisible()
         }
     }
@@ -63,7 +63,7 @@ export class LinearSlider<S extends NotNull> {
 
     public set valueRelative(v: number) {
         if (this.val.setRelative(v, this.rounding)) {
-            this.change.emit(v)
+            this.change.emit(this.val.get())
             this.makeValueVisible()
         }
     }

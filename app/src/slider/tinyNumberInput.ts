@@ -90,8 +90,13 @@ export class TinyNumberInput {
         })
 
         this.elem.addEventListener('keydown', (e: KeyboardEvent) => {
-            if (e.key === 'ArrowUp')        this.value += 1
-            else if (e.key === 'ArrowDown') this.value -= 1
+            if (e.key === 'ArrowUp') {
+                this.value += 1
+                this.input.emit(this.val)
+            } else if (e.key === 'ArrowDown') {
+                this.value -= 1
+                this.input.emit(this.val)
+            }
         })
     }
 }

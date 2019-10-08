@@ -20,11 +20,11 @@ button::-moz-focus-inner {
 }
 
 .h-slider {
-    width: 338px;
+    width: 298px;
 }
 
 .v-slider {
-    height: 338px;
+    height: 298px;
 }
 
 .c-slider {
@@ -114,6 +114,24 @@ button::-moz-focus-inner {
     outline: none;
 }
 
+/************* SLIDER OUTER *************/
+
+.slider-outer {
+    display: inline-flex;
+    vertical-align: top;
+}
+
+.v-slider-outer {
+    flex-direction: column;
+}
+
+.v-slider-outer > .label {
+    font-size: 0.85em;
+    height: 20px;
+    line-height: 1em;
+    text-align: center;
+}
+
 
 /************* PALETTE *************/
 
@@ -149,6 +167,7 @@ button::-moz-focus-inner {
 /************* TINY INPUT *************/
 
 input.tiny-input {
+    box-sizing: border-box;
     border: none;
     border-bottom: 1px solid #ddd;
     background-color: white;
@@ -156,8 +175,6 @@ input.tiny-input {
     padding: 0 0 1px 0;
     text-align: center;
     font-size: 0.75em;
-    width: 0;
-    height: auto;
     flex-grow: 1;
     transition: .12s;
 }
@@ -166,4 +183,9 @@ input.tiny-input:focus {
     padding-bottom: 0;
     border-bottom: 2px solid #006dff;
     outline: none;
+}
+
+.v-slider-outer > .tiny-input {
+    width: 30px;
+    height: 20px;
 }
