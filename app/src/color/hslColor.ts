@@ -1,7 +1,7 @@
-import { Color} from './color'
+import { Color } from './color'
 import { RgbColor } from './rgbColor'
 
-export class HslColor implements Color {
+export class HslColor implements Color<HslColor> {
     constructor(
         public readonly hue: number,
         public readonly sat: number,
@@ -39,11 +39,11 @@ export class HslColor implements Color {
         )
     }
 
-    public toHsl(): HslColor {
+    public get hsl(): HslColor {
         return this
     }
 
-    public toRgb(): RgbColor {
+    public get rgb(): RgbColor {
         const h = this.hue / 60
         const s = this.sat / 100
         const l = this.lum / 100
@@ -91,8 +91,16 @@ export class HslColor implements Color {
     public toString(): string {
         return this.a === 100 ? this.hslString : this.hslaString
     }
+
+    public get hex(): string {
+        return this.rgb.hex
+    }
+
+    public get hexWithAlpha(): string {
+        return this.rgb.hexWithAlpha
+    }
 }
 
-export function isHsl(color: Color): color is HslColor {
+export function isHsl(color: Color<any>): color is HslColor {
     return 'hue' in color
 }

@@ -1,7 +1,7 @@
 import { HslColor } from './hslColor'
 import { Color } from './color'
 
-export class RgbColor implements Color {
+export class RgbColor implements Color<RgbColor> {
     constructor(
         public readonly r: number,
         public readonly g: number,
@@ -39,11 +39,11 @@ export class RgbColor implements Color {
         )
     }
 
-    public toRgb(): RgbColor {
+    public get rgb(): RgbColor {
         return this
     }
 
-    public toHsl(): HslColor {
+    public get hsl(): HslColor {
         const r = this.r / 255
         const g = this.g / 255
         const b = this.b / 255
@@ -74,13 +74,13 @@ export class RgbColor implements Color {
     }
 
     public get hex(): string {
-        const hexStr = (this.r << 16 + this.g << 8 + this.b).toString(16)
+        const hexStr = ((this.r << 16) + (this.g << 8) + this.b).toString(16)
         return '#000000'.substr(0, 7 - hexStr.length) + hexStr
     }
 
     public get hexWithAlpha(): string {
         const a = this.a * 2.55 | 0
-        const hexStr = (this.r << 24 + this.g << 16 + this.b << 8 + a).toString(16)
+        const hexStr = ((this.r << 24) + (this.g << 16) + (this.b << 8) + a).toString(16)
         return '#00000000'.substr(0, 9 - hexStr.length) + hexStr
     }
 
@@ -89,7 +89,7 @@ export class RgbColor implements Color {
     }
 
     public get rgbaString(): string {
-        return `rgba(${this.r}, ${this.b}, ${this.b}, ${this.a})`
+        return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`
     }
 
     public toString(): string {
@@ -97,6 +97,6 @@ export class RgbColor implements Color {
     }
 }
 
-export function isRgb(color: Color): color is RgbColor {
+export function isRgb(color: Color<any>): color is RgbColor {
     return 'r' in color
 }

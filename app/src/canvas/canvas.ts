@@ -1,6 +1,7 @@
+import { NotNull } from '../util/myTypes'
 import { EventEmitter } from '../util/eventEmitter'
 
-export type RenderFunction<S extends {} | void> = (canvas: Canvas<S>, state: S) => Promise<void>
+export type RenderFunction<S extends NotNull> = (canvas: Canvas<S>, state: S) => Promise<void>
 
 enum CanvasState {
     Idle,
@@ -9,18 +10,14 @@ enum CanvasState {
     Dirty,
 }
 
-export class Canvas<S extends {} | void> {
+export class Canvas<S extends NotNull> {
     public readonly elem = document.createElement('canvas') as HTMLCanvasElement
     public readonly ctx = this.elem.getContext('2d') as CanvasRenderingContext2D
 
     private _state: S
 
-    /**
-     * Events:
-     * - `resize`: Emitted when the canvas' physical size changes
-     * - `rendered`: Emitted after the canvas was rendered completely
-     */
-    public readonly events = new EventEmitter<void>()
+    public readonly resize = new EventEmitter<void>()
+    public readonly rendered = new EventEmitter<void>()
 
     private canvasState = CanvasState.Idle
 
@@ -54,7 +51,7 @@ export class Canvas<S extends {} | void> {
     }
 
     public updateSize() {
-        this.events.emit('resize')
+        this.resize.emit()
 
         const dpr = window.devicePixelRatio
         const w = this._width
@@ -62,8 +59,6 @@ export class Canvas<S extends {} | void> {
 
         this.elem.width = Math.round(w / dpr)
         this.elem.height = Math.round(h / dpr)
-        this.elem.style.width = `${w}px`
-        this.elem.style.height = `${h}px`
     }
 
     public get state(): S {
@@ -82,7 +77,7 @@ export class Canvas<S extends {} | void> {
             this.renderer(this, this._state).then(() => {
                 const prev = this.canvasState
                 this.canvasState = CanvasState.Idle
-                this.events.emit('rendered')
+                this.rendered.emit()
 
                 if (prev === CanvasState.Dirty) this.redraw()
             })

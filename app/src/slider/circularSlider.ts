@@ -1,12 +1,10 @@
-import { EventEmitter } from '../util/eventEmitter'
+import { NotNull } from '../util/myTypes'
 import { Canvas } from '../canvas/canvas'
 
 export interface Slider2dOptions {
 }
 
-export class CircularSlider<S extends {} | void> {
-    public readonly events = new EventEmitter<number>()
-
+export class CircularSlider<S extends NotNull> {
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
 

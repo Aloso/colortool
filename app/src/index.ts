@@ -1,221 +1,148 @@
 import { Canvas } from './canvas/canvas'
 import { roundHueGradient } from './canvas/roundHue'
-import { LinearSlider } from './slider/linearSlider'
+import { LinearSlider, SliderOptions } from './slider/linearSlider'
 import { linearGradient } from './canvas/linearGradientCanvas'
 import { CircularSlider } from './slider/circularSlider'
-import { hslToRgb, rgbToHsl } from './color/convertColor'
+import { RgbColor } from './color/rgbColor'
+import { Direction } from './util/direction'
 
-let hue = 0
-let sat = 100
-let lum = 50
-
-const hueValues = [
-    '#f00',
-    '#ff0',
-    '#0f0',
-    '#0ff',
-    '#00f',
-    '#f0f',
-    '#f00',
-]
-const satValues = ['#777', '#f00']
-const lumValues = ['#000', '#f00', '#fff']
-const redValues = ['#000', '#f00']
-const greenValues = ['#f00', '#ff0']
-const blueValues = ['#f00', '#f0f']
-
-
-const circularCanvas = new Canvas<void>(300, 300, roundHueGradient(15), undefined)
-const circularSlider = new CircularSlider(circularCanvas, {})
-document.body.appendChild(circularSlider.elem)
-
-document.body.appendChild(document.createElement('br'))
-document.body.appendChild(document.createElement('br'))
-
-const hueCanvas = new Canvas(300, 30, linearGradient(), hueValues)
-const hueSlider = new LinearSlider(hueCanvas, {
+const slider359Options: SliderOptions = {
     min: 0,
-    max: 359.9,
+    max: 359,
     initial: 0,
     rounding: (n: number) => n | 0,
     step: 4,
     smallStep: 1,
-})
+    direction: Direction.Up,
+}
+
+const slider255Options: SliderOptions = {
+    ...slider359Options,
+    max: 255,
+    step: 2,
+}
+
+const slider100Options: SliderOptions = {
+    ...slider359Options,
+    max: 100,
+    step: 1,
+}
+
+function upSliderCanvas(): Canvas<string[]> {
+    return new Canvas(30, 350, linearGradient(Direction.Up), ['transparent', 'transparent'])
+}
+
+const circularCanvas = new Canvas(350, 350, roundHueGradient(15), undefined)
+const circularSlider = new CircularSlider(circularCanvas, {})
+document.body.appendChild(circularSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
+
+const hueSlider = new LinearSlider(upSliderCanvas(), slider359Options)
 document.body.appendChild(hueSlider.elem)
-
-document.body.appendChild(document.createElement('br'))
-document.body.appendChild(document.createElement('br'))
+document.body.appendChild(document.createTextNode(' '))
 
 
-const satCanvas = new Canvas(300, 30, linearGradient(), satValues)
-const satSlider = new LinearSlider(satCanvas, {
-    min: 0,
-    max: 100,
-    initial: 100,
-    rounding: (n: number) => n | 0,
-})
+const satSlider = new LinearSlider(upSliderCanvas(), slider100Options)
 document.body.appendChild(satSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
 
-document.body.appendChild(document.createElement('br'))
-document.body.appendChild(document.createElement('br'))
-
-const lumCanvas = new Canvas(300, 30, linearGradient(), lumValues)
-const lumSlider = new LinearSlider(lumCanvas, {
-    min: 0,
-    max: 100,
-    initial: 50,
-    rounding: (n: number) => n | 0,
-})
+const lumSlider = new LinearSlider(upSliderCanvas(), slider100Options)
 document.body.appendChild(lumSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
 
-document.body.appendChild(document.createElement('br'))
-document.body.appendChild(document.createElement('br'))
-
-const redCanvas = new Canvas(300, 30, linearGradient(), redValues)
-const redSlider = new LinearSlider(redCanvas, {
-    min: 0,
-    max: 255,
-    initial: 255,
-    rounding: (n: number) => n | 0,
-})
+const redSlider = new LinearSlider(upSliderCanvas(), slider255Options)
 document.body.appendChild(redSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
 
-document.body.appendChild(document.createElement('br'))
-document.body.appendChild(document.createElement('br'))
-
-const greenCanvas = new Canvas(300, 30, linearGradient(), greenValues)
-const greenSlider = new LinearSlider(greenCanvas, {
-    min: 0,
-    max: 255,
-    initial: 0,
-    rounding: (n: number) => n | 0,
-})
+const greenSlider = new LinearSlider(upSliderCanvas(), slider255Options)
 document.body.appendChild(greenSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
 
-document.body.appendChild(document.createElement('br'))
-document.body.appendChild(document.createElement('br'))
-
-const blueCanvas = new Canvas(300, 30, linearGradient(), blueValues)
-const blueSlider = new LinearSlider(blueCanvas, {
-    min: 0,
-    max: 255,
-    initial: 0,
-    rounding: (n: number) => n | 0,
-})
+const blueSlider = new LinearSlider(upSliderCanvas(), slider255Options)
 document.body.appendChild(blueSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
+
+const alphaSlider = new LinearSlider(upSliderCanvas(), slider100Options)
+document.body.appendChild(alphaSlider.elem)
+document.body.appendChild(document.createTextNode(' '))
 
 
 
-hueSlider.events.on('input', v => {
-    hue = v
-    updateSat()
-    updateLum()
 
-    updateRed()
-    updateGreen()
-    updateBlue()
+let rgb = new RgbColor(255, 0, 0)
+let hsl = rgb.hsl
+
+hueSlider.input.on(v => {
+    hsl = hsl.setHue(v)
+    rgb = hsl.rgb
+    updateSliders()
 })
 
-satSlider.events.on('input', v => {
-    sat = v
-    updateHue()
-    updateLum()
-
-    updateRed()
-    updateGreen()
-    updateBlue()
+satSlider.input.on(v => {
+    hsl = hsl.setSat(v)
+    rgb = hsl.rgb
+    updateSliders()
 })
 
-lumSlider.events.on('input', v => {
-    lum = v
-    updateHue()
-    updateSat()
-
-    updateRed()
-    updateGreen()
-    updateBlue()
+lumSlider.input.on(v => {
+    hsl = hsl.setLum(v)
+    rgb = hsl.rgb
+    updateSliders()
 })
 
-redSlider.events.on('input', v => {
-    [hue, sat, lum] = rgbToHsl(v, greenSlider.value, blueSlider.value)
-    updateHue()
-    updateSat()
-    updateLum()
+redSlider.input.on(v => {
+    const old = hsl
+    rgb = rgb.setR(v)
+    hsl = rgb.hsl
+    if (hsl.sat === 0) hsl = hsl.setHue(old.hue)
+    if (hsl.lum === 0 || hsl.lum === 100) hsl = hsl.setSat(old.sat)
 
-    updateGreen()
-    updateBlue()
+    updateSliders()
 })
 
-greenSlider.events.on('input', v => {
-    [hue, sat, lum] = rgbToHsl(redSlider.value, v, blueSlider.value)
-    updateHue()
-    updateSat()
-    updateLum()
+greenSlider.input.on(v => {
+    const old = hsl
+    rgb = rgb.setG(v)
+    hsl = rgb.hsl
+    if (hsl.sat === 0) hsl = hsl.setHue(old.hue)
+    if (hsl.lum === 0 || hsl.lum === 100) hsl = hsl.setSat(old.sat)
 
-    updateRed()
-    updateBlue()
+    updateSliders()
 })
 
-blueSlider.events.on('input', v => {
-    [hue, sat, lum] = rgbToHsl(redSlider.value, greenSlider.value, v)
-    updateHue()
-    updateSat()
-    updateLum()
+blueSlider.input.on(v => {
+    const old = hsl
+    rgb = rgb.setB(v)
+    hsl = rgb.hsl
+    if (hsl.sat === 0) hsl = hsl.setHue(old.hue)
+    if (hsl.lum === 0 || hsl.lum === 100) hsl = hsl.setSat(old.sat)
 
-    updateRed()
-    updateGreen()
+    updateSliders()
 })
 
+alphaSlider.input.on(v => {
+    rgb = rgb.setA(v)
+    hsl = hsl.setA(v)
+})
 
-function rgbString(rgb: [number, number, number]): string {
-    return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`
+const hueIndices = [0, 1, 2, 3, 4, 5, 6]
+
+function updateSliders() {
+    hueSlider.canvas.state = hueIndices.map(i => hsl.setHue(i * 60).hex)
+    satSlider.canvas.state = [hsl.setSat(0).hex, hsl.setSat(100).hex]
+    lumSlider.canvas.state = ['#000', hsl.setLum(50).hex, '#fff']
+    redSlider.canvas.state = [rgb.setR(0).hex, rgb.setR(255).hex]
+    greenSlider.canvas.state = [rgb.setG(0).hex, rgb.setG(255).hex]
+    blueSlider.canvas.state = [rgb.setB(0).hex, rgb.setB(255).hex]
+    alphaSlider.canvas.state = [rgb.setA(0).rgbaString, rgb.setA(100).rgbaString]
+
+    hueSlider.value = hsl.hue
+    satSlider.value = hsl.sat
+    lumSlider.value = hsl.lum
+    redSlider.value = rgb.r
+    greenSlider.value = rgb.g
+    blueSlider.value = rgb.b
+    alphaSlider.value = rgb.a
 }
 
-function updateHue() {
-    hueSlider.canvas.state = hueValues.map((_, i) => rgbString(hslToRgb(  i * 60, sat, lum)))
-    hueSlider.value = hue
-}
-
-function updateSat() {
-    satSlider.canvas.state = [
-        rgbString(hslToRgb(hue, 0, lum)),
-        rgbString(hslToRgb(hue, 100, lum)),
-    ]
-    satSlider.value = sat
-}
-
-function updateLum() {
-    lumSlider.canvas.state = ['#000', rgbString(hslToRgb(hue, sat, 50)), '#fff']
-
-    lumSlider.value = lum
-}
-
-function updateRed() {
-    const [r, g, b] = hslToRgb(hue, sat, lum)
-    redSlider.canvas.state = [
-        rgbString([0, g, b]),
-        rgbString([255, g, b]),
-    ]
-
-    redSlider.value = r
-}
-
-function updateGreen() {
-    const [r, g, b] = hslToRgb(hue, sat, lum)
-    greenSlider.canvas.state = [
-        rgbString([r, 0, b]),
-        rgbString([r, 255, b]),
-    ]
-
-    greenSlider.value = g
-}
-
-function updateBlue() {
-    const [r, g, b] = hslToRgb(hue, sat, lum)
-    blueSlider.canvas.state = [
-        rgbString([r, g, 0]),
-        rgbString([r, g, 255]),
-    ]
-
-    blueSlider.value = b
-}
+updateSliders()

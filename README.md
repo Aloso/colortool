@@ -1,2 +1,2 @@
-# colortool
+# ColorTool
 Color management tool
