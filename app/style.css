@@ -121,6 +121,7 @@ button::-moz-focus-inner {
 .slider-outer {
     display: inline-flex;
     vertical-align: top;
+    margin-bottom: 15px;
 }
 
 .v-slider-outer {
@@ -157,7 +158,7 @@ button::-moz-focus-inner {
 
 .palette-field > div {
     flex-grow: 1;
-    border-radius: 2px;
+    border-radius: 3px;
     box-shadow: 0 0 3px #0005;
     transition: .12s;
 }
