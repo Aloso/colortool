@@ -145,3 +145,25 @@ button::-moz-focus-inner {
     border-radius: 50%;
 }
 
+
+/************* TINY INPUT *************/
+
+input.tiny-input {
+    border: none;
+    border-bottom: 1px solid #ddd;
+    background-color: white;
+    margin: 0;
+    padding: 0 0 1px 0;
+    text-align: center;
+    font-size: 0.75em;
+    width: 0;
+    height: auto;
+    flex-grow: 1;
+    transition: .12s;
+}
+
+input.tiny-input:focus {
+    padding-bottom: 0;
+    border-bottom: 2px solid #006dff;
+    outline: none;
+}

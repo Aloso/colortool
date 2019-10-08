@@ -8,8 +8,9 @@ import { Direction } from './util/direction'
 import { PaletteCell } from './paletteCell';
 import { HslColor } from './color/hslColor';
 import { Color } from './color/color'
+import { TinyNumberInput } from './slider/tinyNumberInput'
 
-const space = (width: number = 7) => {
+const space = (width: number = 5) => {
     const el = document.createElement('div')
     el.setAttribute('style', `display: inline-block; width: ${width}px; height: 0`)
     return el
@@ -54,7 +55,7 @@ const circularSlider = new CircularSlider(circularCanvas, {
 
 const $content = document.getElementById('content') as HTMLElement
 $content.appendChild(circularSlider.elem)
-$content.appendChild(space(14))
+$content.appendChild(space(15))
 
 const hueSlider = new LinearSlider(upSliderCanvas('hue'), slider359Options)
 $content.appendChild(hueSlider.elem)
@@ -67,7 +68,7 @@ $content.appendChild(space())
 
 const lumSlider = new LinearSlider(upSliderCanvas('lum'), slider100Options)
 $content.appendChild(lumSlider.elem)
-$content.appendChild(space(14))
+$content.appendChild(space(15))
 
 const redSlider = new LinearSlider(upSliderCanvas('red'), slider255Options)
 $content.appendChild(redSlider.elem)
@@ -79,11 +80,11 @@ $content.appendChild(space())
 
 const blueSlider = new LinearSlider(upSliderCanvas('blue'), slider255Options)
 $content.appendChild(blueSlider.elem)
-$content.appendChild(space(14))
+$content.appendChild(space(15))
 
 const alphaSlider = new LinearSlider(upSliderCanvas('alpha'), slider100Options)
 $content.appendChild(alphaSlider.elem)
-$content.appendChild(space(14))
+$content.appendChild(space(15))
 
 
 
@@ -223,3 +224,12 @@ function updateLivePalette() {
 }
 
 updateSliders()
+
+const tiny = new TinyNumberInput(20, 0, 359)
+tiny.change.on(v => console.log('change', v))
+tiny.input.on(v => console.log('input', v))
+
+const tinyOuter = document.createElement('div')
+tinyOuter.setAttribute('style', 'display: inline-flex; width: 30px; height: 22px')
+tinyOuter.append(tiny.elem)
+document.body.append(tinyOuter)

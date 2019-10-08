@@ -68,6 +68,13 @@ export class LinearSlider<S extends NotNull> {
         }
     }
 
+    public get min(): number {
+        return this.val.min
+    }
+    public get max(): number {
+        return this.val.max
+    }
+
     private initElement() {
         const dir = this.isVertical ? 'v' : 'h'
 
