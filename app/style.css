@@ -17,6 +17,7 @@ button::-moz-focus-inner {
     height: 30px;
     padding: 15px;
     vertical-align: top;
+    border-radius: 10000px;
 }
 
 .h-slider {
@@ -64,6 +65,7 @@ button::-moz-focus-inner {
     margin: 0;
     padding: 0;
     background: transparent;
+    border-radius: 10000px;
 }
 
 .h-slider-inner {
@@ -157,6 +159,11 @@ button::-moz-focus-inner {
     flex-grow: 1;
     border-radius: 2px;
     box-shadow: 0 0 3px #0005;
+    transition: .12s;
+}
+
+.palette-field:focus > div {
+    transform: scale(0.85);
 }
 
 .palette-field.round > div {

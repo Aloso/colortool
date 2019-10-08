@@ -86,6 +86,7 @@ export class LinearSlider<S extends NotNull> {
         this.elem.appendChild(inner)
 
         this.handle.className = `slider-handle ${dir}-slider-handle`
+        this.handle.setAttribute('tabindex', '-1')
         inner.appendChild(this.handle)
 
         let isPressed = false

@@ -99,6 +99,7 @@ export class CircularSlider<S extends NotNull> {
         this.elem.appendChild(inner)
 
         this.handle.className = 'slider-handle c-slider-handle'
+        this.handle.setAttribute('tabindex', '-1')
         inner.appendChild(this.handle)
 
         let isPressed = false
