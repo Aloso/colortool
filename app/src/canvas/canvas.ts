@@ -26,6 +26,7 @@ export class Canvas<S extends NotNull> {
         private _height: number,
         public renderer: RenderFunction<S>,
         state: S,
+        public name: string,
     ) {
         this._state = state
 
@@ -79,7 +80,9 @@ export class Canvas<S extends NotNull> {
                 this.canvasState = CanvasState.Idle
                 this.rendered.emit()
 
-                if (prev === CanvasState.Dirty) this.redraw()
+                if (prev === CanvasState.Dirty) {
+                    this.redraw()
+                }
             })
         } else if (force) {
             this.canvasState = CanvasState.Dirty

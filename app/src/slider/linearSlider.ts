@@ -2,6 +2,7 @@ import { NotNull } from '../util/myTypes'
 import { EventEmitter } from '../util/eventEmitter'
 import { Canvas } from '../canvas/canvas'
 import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/direction'
+import { Limit } from '../util/limit'
 
 export interface SliderOptions {
     min: number,
@@ -13,11 +14,11 @@ export interface SliderOptions {
     direction?: Direction,
 }
 
-export class LinearSlider<S extends NotNull> {
-    private _value: number
+const identity = (n: number) => n
 
-    private readonly min: number
-    private readonly max: number
+export class LinearSlider<S extends NotNull> {
+    private readonly val: Limit
+
     private readonly rounding: (n: number) => number
     private readonly step: number
     private readonly smallStep: number
@@ -31,52 +32,40 @@ export class LinearSlider<S extends NotNull> {
     private readonly handle = document.createElement('button')
 
     constructor(public readonly canvas: Canvas<S>, options: SliderOptions) {
-        if (options.min > options.max) {
-            throw new Error(`min (${options.min}) is bigger than max (${options.max})`)
-        }
-
-        this.min = options.min
-        this.max = options.max
         if (options.initial == null) options.initial = options.min
+        this.val = Limit.fromErr(options.initial, options.min, options.max)
 
-        if (options.initial < options.min || options.initial > options.max) {
-            throw new Error(`Initial value (${options.initial}) out of bounds (${options.min}, ${options.max})`)
-        }
-
-        this.rounding = options.rounding || ((n: number) => n)
+        this.rounding = options.rounding || identity
         this.step = options.step || 1
         this.smallStep = options.smallStep || this.step
 
         this.direction = options.direction || Direction.Right
         this.isVertical = this.direction === Direction.Up || this.direction === Direction.Down
 
-        this._value = options.initial
-
         this.initElement()
         this.makeValueVisible()
     }
 
     public get value(): number {
-        return this._value
+        return this.val.get()
     }
 
     public set value(v: number) {
-        v = Math.max(this.min, Math.min(this.max, v))
-        v = this.rounding(v)
-        if (v !== this._value) {
-            this._value = v
+        if (this.val.set(this.rounding(v))) {
             this.change.emit(v)
             this.makeValueVisible()
         }
     }
 
     public get valueRelative(): number {
-        return (this._value - this.min) / (this.max - this.min)
+        return this.val.getRelative()
     }
 
     public set valueRelative(v: number) {
-        v = Math.max(0, Math.min(1, v))
-        this.value = this.min + v * (this.max - this.min)
+        if (this.val.setRelative(v, this.rounding)) {
+            this.change.emit(v)
+            this.makeValueVisible()
+        }
     }
 
     private initElement() {
@@ -97,9 +86,12 @@ export class LinearSlider<S extends NotNull> {
         this.elem.addEventListener('mousedown', e => {
             if (e.button === 0) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
-                this.input.emit(this._value)
+                this.input.emit(this.val.get())
                 isPressed = true
                 setTimeout(() => this.handle.focus())
+
+                // prevent text selection while dragging
+                e.preventDefault()
             }
         })
 
@@ -111,7 +103,7 @@ export class LinearSlider<S extends NotNull> {
                 const sign = getSignForSliderKeypress(pressed, this.direction)
 
                 this.value += sign * val
-                this.input.emit(this._value)
+                this.input.emit(this.val.get())
 
                 e.preventDefault()
             }
@@ -124,7 +116,7 @@ export class LinearSlider<S extends NotNull> {
         window.addEventListener('mousemove', e => {
             if (isPressed) {
                 this.valueRelative = getRelativeValue(inner, e, this.direction)
-                this.input.emit(this._value)
+                this.input.emit(this.val.get())
             }
         })
         window.addEventListener('mouseup', () => isPressed = false)

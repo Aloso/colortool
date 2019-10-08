@@ -5,6 +5,16 @@ export enum Direction {
     Up,
 }
 
+export enum CircleOuterDir {
+    Clockwise,
+    Anticlockwise,
+}
+
+export enum CircleInnerDir {
+    Outwards,
+    Inwards,
+}
+
 export function keyToDirection(key: string): Direction | null {
     switch (key) {
         case 'ArrowRight': return Direction.Right
@@ -16,7 +26,7 @@ export function keyToDirection(key: string): Direction | null {
 }
 
 // mapping[sliderDir][pressed] => factor
-const mapping = [
+const mapping: (1 | -1)[][] = [
     // Right
     [1, -1, -1, 1],
     // Left
@@ -27,9 +37,6 @@ const mapping = [
     [1, -1, -1, 1],
 ]
 
-/**
- * Returns 1 or -1
- */
-export function getSignForSliderKeypress(pressed: Direction, sliderDir: Direction): number {
+export function getSignForSliderKeypress(pressed: Direction, sliderDir: Direction): 1 | -1 {
     return mapping[sliderDir][pressed]
 }

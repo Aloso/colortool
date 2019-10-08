@@ -6,7 +6,7 @@ export function linearGradient(direction: Direction = Direction.Right): RenderFu
         const w = canvas.elem.width
         const h = canvas.elem.height
 
-        canvas.ctx.clearRect(0, 0, w, h)
+        canvas.elem.width = w
         canvas.ctx.rect(0, 0, w, h)
 
         let grad: CanvasGradient
