@@ -7,5 +7,7 @@ export interface Color {
 
     toRgb(): RgbColor
     toHsl(): HslColor
+
+    toString(): string
 }
 
