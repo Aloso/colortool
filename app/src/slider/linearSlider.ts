@@ -19,11 +19,11 @@ const identity = (n: number) => n
 export class LinearSlider<S extends NotNull> {
     private readonly val: Limit
 
-    private readonly rounding: (n: number) => number
-    private readonly step: number
-    private readonly smallStep: number
-    private readonly direction: Direction
-    private readonly isVertical: boolean
+    public readonly rounding: (n: number) => number
+    public readonly step: number
+    public readonly smallStep: number
+    public readonly direction: Direction
+    public readonly isVertical: boolean
 
     public readonly change = new EventEmitter<number>()
     public readonly input = new EventEmitter<number>()

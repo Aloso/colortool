@@ -7,6 +7,13 @@ import { RgbColor } from './color/rgbColor'
 import { Direction } from './util/direction'
 import { PaletteCell } from './paletteCell';
 import { HslColor } from './color/hslColor';
+import { Color } from './color/color'
+
+const space = (width: number = 7) => {
+    const el = document.createElement('div')
+    el.setAttribute('style', `display: inline-block; width: ${width}px; height: 0`)
+    return el
+}
 
 const slider359Options: SliderOptions = {
     min: 0,
@@ -30,10 +37,10 @@ const slider100Options: SliderOptions = {
 }
 
 function upSliderCanvas(name: string): Canvas<string[]> {
-    return new Canvas(30, 350, linearGradient(Direction.Up), ['transparent', 'transparent'], name)
+    return new Canvas(30, 338, linearGradient(Direction.Up), ['transparent', 'transparent'], name)
 }
 
-const circularCanvas = new Canvas(350, 350, roundHueGradient(15), undefined, 'hueCircle')
+const circularCanvas = new Canvas(338, 338, roundHueGradient(15), undefined, 'hueCircle')
 const circularSlider = new CircularSlider(circularCanvas, {
     min: 0,
     max: 100,
@@ -47,36 +54,36 @@ const circularSlider = new CircularSlider(circularCanvas, {
 
 const $content = document.getElementById('content') as HTMLElement
 $content.appendChild(circularSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space(14))
 
 const hueSlider = new LinearSlider(upSliderCanvas('hue'), slider359Options)
 $content.appendChild(hueSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space())
 
 
 const satSlider = new LinearSlider(upSliderCanvas('sat'), slider100Options)
 $content.appendChild(satSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space())
 
 const lumSlider = new LinearSlider(upSliderCanvas('lum'), slider100Options)
 $content.appendChild(lumSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space(14))
 
 const redSlider = new LinearSlider(upSliderCanvas('red'), slider255Options)
 $content.appendChild(redSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space())
 
 const greenSlider = new LinearSlider(upSliderCanvas('green'), slider255Options)
 $content.appendChild(greenSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space())
 
 const blueSlider = new LinearSlider(upSliderCanvas('blue'), slider255Options)
 $content.appendChild(blueSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space(14))
 
 const alphaSlider = new LinearSlider(upSliderCanvas('alpha'), slider100Options)
 $content.appendChild(alphaSlider.elem)
-$content.appendChild(document.createTextNode(' '))
+$content.appendChild(space(14))
 
 
 
@@ -93,27 +100,27 @@ const $palette = document.createElement('div')
 $palette.setAttribute('style', 'display: inline-block; vertical-align: top')
 const paletteHues = [0, 22, 38, 60, 83, 120, 150, 180, 195, 217, 240, 260, 280, 300, 330]
 
-for (const l of [17, 33, 50, 67, 83]) {
-    for (const h of paletteHues) {
-        const p = new PaletteCell(new HslColor(h, 100, 100 - l))
-        p.elem.addEventListener('click', () => {
-            hsl = p.color.hsl
-            rgb = hsl.rgb
-            updateSliders()
-            updateLivePalette()
-        })
-        $palette.append(p.elem)
-    }
-    $palette.appendChild(document.createElement('br'))
-}for (let l = 0; l < 15; l++) {
+const select = (c: Color<any>) => () => {
+    hsl = c.hsl
+    rgb = hsl.rgb
+    updateSliders()
+    updateLivePalette()
+}
+
+for (let l = 0; l < 15; l++) {
     const p = new PaletteCell(new HslColor(0, 0, l / 14 * 100))
-    p.elem.addEventListener('click', () => {
-        hsl = p.color.hsl
-        rgb = hsl.rgb
-        updateSliders()
-        updateLivePalette()
-    })
+    p.elem.addEventListener('click', select(p.color))
     $palette.append(p.elem)
+}
+for (const sat of [100, 55]) {
+    for (const lum of [18, 30, 50, 65, 78]) {
+        $palette.appendChild(document.createElement('br'))
+        for (const hue of paletteHues) {
+            const p = new PaletteCell(new HslColor(hue, sat, 100 - lum))
+            p.elem.addEventListener('click', select(p.color))
+            $palette.append(p.elem)
+        }
+    }
 }
 $content.appendChild($palette)
 

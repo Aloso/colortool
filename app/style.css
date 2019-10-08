@@ -20,16 +20,16 @@ button::-moz-focus-inner {
 }
 
 .h-slider {
-    width: 350px;
+    width: 338px;
 }
 
 .v-slider {
-    height: 350px;
+    height: 338px;
 }
 
 .c-slider {
-    width: 350px;
-    height: 350px;
+    width: 338px;
+    height: 338px;
 }
 
 /************* SLIDER CANVAS *************/
@@ -121,8 +121,8 @@ button::-moz-focus-inner {
     position: relative;
     display: inline-flex;
     box-sizing: border-box;
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
     border: none;
     padding: 0;
     margin: 0 3px 3px 0;
@@ -137,7 +137,7 @@ button::-moz-focus-inner {
 
 .palette-field > div {
     flex-grow: 1;
-    border-radius: 3px;
+    border-radius: 2px;
     box-shadow: 0 0 3px #0005;
 }
 
