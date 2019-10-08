@@ -5,6 +5,8 @@ import { linearGradient } from './canvas/linearGradientCanvas'
 import { CircularSlider } from './slider/circularSlider'
 import { RgbColor } from './color/rgbColor'
 import { Direction } from './util/direction'
+import { PaletteCell } from './paletteCell';
+import { HslColor } from './color/hslColor';
 
 const slider359Options: SliderOptions = {
     min: 0,
@@ -82,28 +84,65 @@ $content.appendChild(document.createTextNode(' '))
 let rgb = new RgbColor(255, 0, 0)
 let hsl = rgb.hsl
 
+const livePalette = new PaletteCell(rgb)
+livePalette.elem.className += ' big round'
+livePalette.elem.style.position = 'absolute'
+$content.prepend(livePalette.elem)
+
+const $palette = document.createElement('div')
+$palette.setAttribute('style', 'display: inline-block; vertical-align: top')
+const paletteHues = [0, 22, 38, 60, 83, 120, 150, 180, 195, 217, 240, 260, 280, 300, 330]
+
+for (const l of [17, 33, 50, 67, 83]) {
+    for (const h of paletteHues) {
+        const p = new PaletteCell(new HslColor(h, 100, 100 - l))
+        p.elem.addEventListener('click', () => {
+            hsl = p.color.hsl
+            rgb = hsl.rgb
+            updateSliders()
+            updateLivePalette()
+        })
+        $palette.append(p.elem)
+    }
+    $palette.appendChild(document.createElement('br'))
+}for (let l = 0; l < 15; l++) {
+    const p = new PaletteCell(new HslColor(0, 0, l / 14 * 100))
+    p.elem.addEventListener('click', () => {
+        hsl = p.color.hsl
+        rgb = hsl.rgb
+        updateSliders()
+        updateLivePalette()
+    })
+    $palette.append(p.elem)
+}
+$content.appendChild($palette)
+
 circularSlider.input.on(({ inner, outer }) => {
     hsl = hsl.setHue(outer).setSat(inner)
     rgb = hsl.rgb
     updateSliders()
+    updateLivePalette()
 })
 
 hueSlider.input.on(v => {
     hsl = hsl.setHue(v)
     rgb = hsl.rgb
     updateSliders()
+    updateLivePalette()
 })
 
 satSlider.input.on(v => {
     hsl = hsl.setSat(v)
     rgb = hsl.rgb
     updateSliders()
+    updateLivePalette()
 })
 
 lumSlider.input.on(v => {
     hsl = hsl.setLum(v)
     rgb = hsl.rgb
     updateSliders()
+    updateLivePalette()
 })
 
 redSlider.input.on(v => {
@@ -114,6 +153,7 @@ redSlider.input.on(v => {
     if (hsl.lum === 0 || hsl.lum === 100) hsl = hsl.setSat(old.sat)
 
     updateSliders()
+    updateLivePalette()
 })
 
 greenSlider.input.on(v => {
@@ -124,6 +164,7 @@ greenSlider.input.on(v => {
     if (hsl.lum === 0 || hsl.lum === 100) hsl = hsl.setSat(old.sat)
 
     updateSliders()
+    updateLivePalette()
 })
 
 blueSlider.input.on(v => {
@@ -134,11 +175,13 @@ blueSlider.input.on(v => {
     if (hsl.lum === 0 || hsl.lum === 100) hsl = hsl.setSat(old.sat)
 
     updateSliders()
+    updateLivePalette()
 })
 
 alphaSlider.input.on(v => {
     rgb = rgb.setA(v)
     hsl = hsl.setA(v)
+    updateLivePalette()
 })
 
 const hueIndices = [0, 1, 2, 3, 4, 5, 6]
@@ -166,6 +209,10 @@ function updateSliders() {
 
     const n4 = performance.now()
     if (n4 - n1 > 8) console.log(`${(n4 - n1).toFixed(0)} ms !!!`)
+}
+
+function updateLivePalette() {
+    livePalette.color = rgb
 }
 
 updateSliders()

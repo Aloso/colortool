@@ -16,6 +16,7 @@ button::-moz-focus-inner {
     width: 30px;
     height: 30px;
     padding: 15px;
+    vertical-align: top;
 }
 
 .h-slider {
@@ -112,3 +113,35 @@ button::-moz-focus-inner {
     border: 3px solid #0006;
     outline: none;
 }
+
+
+/************* PALETTE *************/
+
+.palette-field {
+    position: relative;
+    display: inline-flex;
+    box-sizing: border-box;
+    width: 25px;
+    height: 25px;
+    border: none;
+    padding: 0;
+    margin: 0 3px 3px 0;
+    background-color: transparent;
+    vertical-align: top;
+}
+
+.palette-field.big {
+    width: 55px;
+    height: 55px;
+}
+
+.palette-field > div {
+    flex-grow: 1;
+    border-radius: 3px;
+    box-shadow: 0 0 3px #0005;
+}
+
+.palette-field.round > div {
+    border-radius: 50%;
+}
+

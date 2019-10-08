@@ -85,7 +85,7 @@ export class RgbColor implements Color<RgbColor> {
     }
 
     public get rgbString(): string {
-        return `rgb(${this.r}, ${this.b}, ${this.b})`
+        return `rgb(${this.r}, ${this.g}, ${this.b})`
     }
 
     public get rgbaString(): string {
