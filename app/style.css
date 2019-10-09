@@ -14,6 +14,18 @@ button::-moz-focus-inner {
     border: 0;
 }
 
+.tiny-input::-webkit-outer-spin-button,
+.tiny-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.tiny-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+
+
 #content {
     display: flex;
     flex-wrap: wrap;
