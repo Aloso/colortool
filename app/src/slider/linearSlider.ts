@@ -103,6 +103,18 @@ export class LinearSlider<S extends NotNull> {
             }
         })
 
+        this.elem.addEventListener('touchstart', e => {
+            if (e.touches.length === 1) {
+                this.valueRelative = getRelativeValue(inner, e.touches[0], this.direction)
+                this.input.emit(this.val.get())
+                isPressed = true
+                setTimeout(() => this.handle.focus())
+
+                // prevent scrolling while dragging
+                e.preventDefault()
+            }
+        })
+
         let isKeydown = false
         this.handle.addEventListener('keydown', e => {
             const pressed = keyToDirection(e.key)
@@ -127,7 +139,20 @@ export class LinearSlider<S extends NotNull> {
                 this.input.emit(this.val.get())
             }
         })
+        window.addEventListener('touchmove', e => {
+            if (isPressed && e.touches.length === 1) {
+                this.valueRelative = getRelativeValue(inner, e.touches[0], this.direction)
+                this.input.emit(this.val.get())
+
+                // prevent scrolling while dragging
+                e.preventDefault()
+            } else {
+                isPressed = false
+            }
+        })
         window.addEventListener('mouseup', () => isPressed = false)
+        window.addEventListener('touchend', () => isPressed = false)
+        window.addEventListener('touchcancel', () => isPressed = false)
         window.addEventListener('blur', () => isPressed = false)
     }
 
@@ -149,7 +174,7 @@ export class LinearSlider<S extends NotNull> {
     }
 }
 
-function getRelativeValue(elem: HTMLElement, e: MouseEvent, direction: Direction): number {
+function getRelativeValue(elem: HTMLElement, e: { clientX: number, clientY: number }, direction: Direction): number {
     const box = elem.getBoundingClientRect()
     switch (direction) {
         case Direction.Right:

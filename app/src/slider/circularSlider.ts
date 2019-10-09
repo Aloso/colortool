@@ -120,6 +120,22 @@ export class CircularSlider<S extends NotNull> {
             }
         })
 
+        this.elem.addEventListener('touchstart', e => {
+            if (e.touches.length === 1) {
+                this.valueRelative = getRelativeValues(inner, e.touches[0], this.startAngle, this.iDirection, this.oDirection)
+                this.input.emit({
+                    inner: this.iVal.get(),
+                    outer: this.oVal.get(),
+                })
+
+                isPressed = true
+                setTimeout(() => this.handle.focus())
+
+                // prevent scrolling while dragging
+                e.preventDefault()
+            }
+        })
+
         window.addEventListener('mousemove', e => {
             if (isPressed) {
                 this.valueRelative = getRelativeValues(inner, e, this.startAngle, this.iDirection, this.oDirection)
@@ -127,6 +143,20 @@ export class CircularSlider<S extends NotNull> {
                     inner: this.iVal.get(),
                     outer: this.oVal.get(),
                 })
+            }
+        })
+        window.addEventListener('touchmove', e => {
+            if (isPressed && e.touches.length === 1) {
+                this.valueRelative = getRelativeValues(inner, e.touches[0], this.startAngle, this.iDirection, this.oDirection)
+                this.input.emit({
+                    inner: this.iVal.get(),
+                    outer: this.oVal.get(),
+                })
+
+                // prevent scrolling while dragging
+                e.preventDefault()
+            } else {
+                isPressed = false
             }
         })
         window.addEventListener('mouseup', () => isPressed = false)
@@ -147,7 +177,7 @@ export class CircularSlider<S extends NotNull> {
 
 function getRelativeValues(
     elem: HTMLElement,
-    e: MouseEvent,
+    e: { clientX: number, clientY: number },
     startAngle: number,
     id: CircleInnerDir,
     od: CircleOuterDir,
