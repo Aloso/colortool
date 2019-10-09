@@ -12,15 +12,13 @@ import { EventEmitter } from '../util/eventEmitter'
  * This means that the last row might not be full.
  */
 export class Palette {
-    public readonly elem = document.createElement('div')
-
     private _x = 0
     private _y = 0
 
     public readonly moveFocus = new EventEmitter<PaletteCell>()
     public readonly select = new EventEmitter<PaletteCell>()
 
-    constructor(public readonly rows: PaletteCell[][]) {
+    constructor(public readonly rows: PaletteCell[][], public readonly elem: HTMLElement = document.createElement('div')) {
         this.initElement()
         this.setFocus(this._x, this._y)
     }

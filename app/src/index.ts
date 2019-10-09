@@ -67,16 +67,19 @@ const greenInput = upSliderInput('G', slider255Options)
 const blueInput = upSliderInput('B', slider255Options)
 const alphaInput = upSliderInput('A', slider100Options)
 
-const $content = document.getElementById('content') as HTMLElement
-$content.append(
-    circularSlider.elem, space(15),
+const contentCircle = document.getElementById('cp-circle') as HTMLElement
+const contentSlider = document.getElementById('cp-slider') as HTMLElement
+const contentPalette = document.getElementById('cp-palette') as HTMLElement
+
+contentCircle.append(circularSlider.elem)
+contentSlider.append(
     hueInput.elem, space(),
     satInput.elem, space(),
     lumInput.elem, space(15),
     redInput.elem, space(),
     greenInput.elem, space(),
     blueInput.elem, space(15),
-    alphaInput.elem, space(15),
+    alphaInput.elem,
 )
 
 
@@ -86,7 +89,7 @@ let hsl = rgb.hsl
 const livePalette = new PaletteCell(rgb)
 livePalette.elem.className += ' big round'
 livePalette.elem.style.position = 'absolute'
-$content.prepend(livePalette.elem)
+contentCircle.prepend(livePalette.elem)
 
 const $palette = document.createElement('div')
 $palette.setAttribute('style', 'display: inline-block; vertical-align: top')
@@ -104,15 +107,13 @@ const paletteRows: PaletteCell[][] = [
     ...makePalette(55),
 ]
 
-const palette = new Palette(paletteRows)
+const palette = new Palette(paletteRows, contentPalette)
 palette.select.on(cell => {
     hsl = cell.color.hsl
     rgb = cell.color.rgb
     updateSliders()
     updateLivePalette()
 })
-palette.elem.style.width = '465px'
-$content.append(palette.elem)
 
 circularSlider.input.on(({ inner, outer }) => {
     hsl = hsl.setHue(outer).setSat(inner)
