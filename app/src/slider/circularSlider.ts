@@ -164,7 +164,7 @@ function getRelativeValues(
     const theta = (Math.atan2(dy, dx) / Math.PI + 1) / 2
     const angle = od === CircleOuterDir.Anticlockwise ? 1 - theta : theta
 
-    const inner = id !== CircleInnerDir.Inwards ? 1 - distCenter : distCenter
+    const inner = id === CircleInnerDir.Inwards ? 1 - distCenter : distCenter
     const outer = (angle + startAngle) % 1
 
     return { inner, outer }

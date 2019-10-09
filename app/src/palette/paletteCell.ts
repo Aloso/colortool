@@ -5,7 +5,7 @@ import { RgbColor } from '../color/rgbColor'
 export class PaletteCell {
     private _color: RgbColor
 
-    public readonly elem = document.createElement('button')
+    public readonly elem = document.createElement('div')
     private readonly inner = document.createElement('div')
 
     public readonly colorChanged = new EventEmitter<RgbColor>()
