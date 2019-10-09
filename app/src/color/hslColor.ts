@@ -10,6 +10,15 @@ export class HslColor implements Color<HslColor> {
     ) {
     }
 
+    public static from(hue: number, sat: number, lum: number, a = 100): HslColor {
+        return new HslColor(
+            Math.max(0, Math.min(359, hue)) | 0,
+            Math.max(0, Math.min(100, sat)) | 0,
+            Math.max(0, Math.min(100, lum)) | 0,
+            Math.max(0, Math.min(100, a)) | 0,
+        )
+    }
+
     public setHue(hue: number): HslColor {
         const hueValid = Math.max(0, Math.min(359, hue)) | 0
         return new HslColor(hueValid, this.sat, this.lum, this.a)
@@ -28,15 +37,6 @@ export class HslColor implements Color<HslColor> {
     public setA(a: number): HslColor {
         const aValid = Math.max(0, Math.min(100, a)) | 0
         return new HslColor(this.hue, this.sat, this.lum, aValid)
-    }
-
-    public static from(hue: number, sat: number, lum: number, a = 100): HslColor {
-        return new HslColor(
-            Math.max(0, Math.min(359, hue)) | 0,
-            Math.max(0, Math.min(100, sat)) | 0,
-            Math.max(0, Math.min(100, lum)) | 0,
-            Math.max(0, Math.min(100, a)) | 0,
-        )
     }
 
     public get hsl(): HslColor {

@@ -10,6 +10,15 @@ export class RgbColor implements Color<RgbColor> {
     ) {
     }
 
+    public static from(r: number, g: number, b: number, a = 100): RgbColor {
+        return new RgbColor(
+            Math.max(0, Math.min(255, r)) | 0,
+            Math.max(0, Math.min(255, g)) | 0,
+            Math.max(0, Math.min(255, b)) | 0,
+            Math.max(0, Math.min(100, a)) | 0,
+        )
+    }
+
     public setR(r: number): RgbColor {
         const rValid = Math.max(0, Math.min(255, r)) | 0
         return new RgbColor(rValid, this.g, this.b, this.a)
@@ -30,15 +39,6 @@ export class RgbColor implements Color<RgbColor> {
         return new RgbColor(this.r, this.g, this.b, aValid)
     }
 
-    public static from(r: number, g: number, b: number, a = 100): RgbColor {
-        return new RgbColor(
-            Math.max(0, Math.min(255, r)) | 0,
-            Math.max(0, Math.min(255, g)) | 0,
-            Math.max(0, Math.min(255, b)) | 0,
-            Math.max(0, Math.min(100, a)) | 0,
-        )
-    }
-
     public get rgb(): RgbColor {
         return this
     }
@@ -52,12 +52,12 @@ export class RgbColor implements Color<RgbColor> {
         const d = M - m
 
         let h: number
-        if (d == 0) {
+        if (d === 0) {
             h = 0
-        } else if (M == r) {
+        } else if (M === r) {
             h = ((g - b) / d) % 6
             if (h < 0) h += 6
-        } else if (M == g) {
+        } else if (M === g) {
             h = (b - r) / d + 2
             if (h < 0) h += 6
         } else {

@@ -1,6 +1,6 @@
-import { Color } from './color/color'
-import { EventEmitter } from './util/eventEmitter'
-import { RgbColor } from './color/rgbColor';
+import { Color } from '../color/color'
+import { EventEmitter } from '../util/eventEmitter'
+import { RgbColor } from '../color/rgbColor'
 
 export class PaletteCell {
     private _color: RgbColor

@@ -68,7 +68,7 @@ export class CircularSlider<S extends NotNull> {
     public get value(): CircularValues {
         return {
             outer: this.oVal.get(),
-            inner: this.iVal.get()
+            inner: this.iVal.get(),
         }
     }
 
@@ -162,9 +162,9 @@ function getRelativeValues(
     const distCenter = Math.sqrt(dx * dx + dy * dy) / r
 
     const theta = (Math.atan2(dy, dx) / Math.PI + 1) / 2
-    const angle = od === CircleOuterDir.Clockwise ? theta : 1 - theta
+    const angle = od === CircleOuterDir.Anticlockwise ? 1 - theta : theta
 
-    const inner = id === CircleInnerDir.Outwards ? distCenter : 1 - distCenter
+    const inner = id !== CircleInnerDir.Inwards ? 1 - distCenter : distCenter
     const outer = (angle + startAngle) % 1
 
     return { inner, outer }

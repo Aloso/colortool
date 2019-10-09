@@ -19,7 +19,7 @@ export class EventEmitter<T extends NotNull> {
      * Unsubscribe from events
      */
     public off(listener: (event: T) => void): boolean {
-        let ix = this.listeners.indexOf(listener)
+        const ix = this.listeners.indexOf(listener)
         if (ix !== -1) {
             this.listeners.splice(ix, 1)
             return true
@@ -34,9 +34,5 @@ export class EventEmitter<T extends NotNull> {
         for (const listener of this.listeners) {
             listener(event)
         }
-    }
-
-    public get count(): number {
-        return this.listeners.length
     }
 }

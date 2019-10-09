@@ -2,8 +2,8 @@ import { Canvas, RenderFunction } from './canvas'
 import { hsToRgb } from '../color/convertColor'
 
 function drawImageLazily(data: Uint8ClampedArray, size: number, padding: number) {
-    let radius = size / 2 - padding
-    let mid = size / 2
+    const radius = size / 2 - padding
+    const mid = size / 2
     let y = 0
 
     for (let row = 0; row < size; row++) setTimeout(() => {
@@ -40,7 +40,7 @@ export function roundHueGradient(padding: number): RenderFunction<void> {
         const h = canvas.elem.height
         if (w !== h) throw new Error(`Canvas isn't square: ${w}x${h}`)
 
-        let img = canvas.ctx.getImageData(0, 0, w, w)
+        const img = canvas.ctx.getImageData(0, 0, w, w)
         drawImageLazily(img.data, w, padding)
 
         return new Promise(resolve => setTimeout(() => {

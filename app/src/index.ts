@@ -5,8 +5,8 @@ import { linearGradient } from './canvas/linearGradientCanvas'
 import { CircularSlider } from './slider/circularSlider'
 import { RgbColor } from './color/rgbColor'
 import { Direction } from './util/direction'
-import { PaletteCell } from './paletteCell';
-import { HslColor } from './color/hslColor';
+import { PaletteCell } from './palette/paletteCell'
+import { HslColor } from './color/hslColor'
 import { Color } from './color/color'
 import { SliderWithInput } from './slider/sliderWithInput'
 

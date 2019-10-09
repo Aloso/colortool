@@ -141,6 +141,8 @@ button::-moz-focus-inner {
 .palette-field {
     position: relative;
     display: inline-flex;
+    flex-direction: column;
+    align-items: stretch;
     box-sizing: border-box;
     width: 28px;
     height: 28px;
