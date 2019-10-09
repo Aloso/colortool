@@ -2,6 +2,8 @@ body {
     margin: 0;
     padding: 20px;
     font-family: Roboto, 'Segoe UI', 'Noto Sans', -apple-system, system-ui, BlinkMacSystemFont, 'Droid Sans', sans-serif;
+    background-color: #222222;
+    color: white;
 }
 
 @media (max-width: 1000px) {
@@ -265,8 +267,9 @@ button::-moz-focus-inner {
 input.tiny-input {
     box-sizing: border-box;
     border: none;
-    border-bottom: 1px solid #ddd;
-    background-color: white;
+    border-bottom: 1px solid #555;
+    background-color: transparent;
+    color: white;
     margin: 0;
     padding: 0 0 1px 0;
     text-align: center;
@@ -277,7 +280,7 @@ input.tiny-input {
 
 input.tiny-input:focus {
     padding-bottom: 0;
-    border-bottom: 2px solid #006dff;
+    border-bottom: 2px solid #3285ff;
     outline: none;
 }
 
