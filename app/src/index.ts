@@ -42,8 +42,9 @@ function upSliderCanvas(): Canvas<string[]> {
     return new Canvas(30, 299, linearGradient(Direction.Up), ['transparent', 'transparent'])
 }
 
-function upSliderInput(label: string, options: SliderOptions): SliderWithInput<string[]> {
+function upSliderInput(label: string, options: SliderOptions, transparent = false): SliderWithInput<string[]> {
     const slider = new LinearSlider(upSliderCanvas(), options)
+    if (transparent) slider.elem.classList.add('transparent')
     return new SliderWithInput(slider, label)
 }
 
@@ -65,7 +66,7 @@ const lumInput = upSliderInput('L', slider100Options)
 const redInput = upSliderInput('R', slider255Options)
 const greenInput = upSliderInput('G', slider255Options)
 const blueInput = upSliderInput('B', slider255Options)
-const alphaInput = upSliderInput('A', slider100Options)
+const alphaInput = upSliderInput('A', slider100Options, true)
 
 const contentCircle = document.getElementById('cp-circle') as HTMLElement
 const contentSlider = document.getElementById('cp-slider') as HTMLElement
