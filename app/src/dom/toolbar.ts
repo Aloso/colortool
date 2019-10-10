@@ -1,17 +1,23 @@
-import { MenuItem } from './menuItem'
+import { isMenuItem, MenuItem, MenuItemOptions } from './menuItem'
 
 export class Toolbar {
-  constructor(
-    private items: MenuItem[],
-    public readonly elem = document.createElement('div'),
-  ) {
-    this.initElement(items)
-  }
+    private _items: MenuItem[]
 
-  private initElement(items: MenuItem[]) {
-    this.elem.classList.add('toolbar')
+    constructor(
+        items: (MenuItem | MenuItemOptions)[],
+        public readonly elem = document.createElement('div'),
+    ) {
+        this._items = items.map(it => {
+            if (isMenuItem(it)) return it
+            else return new MenuItem(it)
+        })
+        this.initElement(items)
+    }
 
-    const children = this.items.map(it => it.elem)
-    this.elem.append.apply(this.elem, children)
-  }
+    private initElement(items: (MenuItem | MenuItemOptions)[]) {
+        this.elem.classList.add('toolbar')
+
+        const children = this._items.map(it => it.elem)
+        this.elem.append.apply(this.elem, children)
+    }
 }

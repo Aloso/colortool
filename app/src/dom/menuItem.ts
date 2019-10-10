@@ -10,7 +10,7 @@ export interface MenuItemOptions {
     readonly disabled?: boolean
 }
 
-export function isToolbarItem(item: MenuItem | MenuItemOptions): item is MenuItem {
+export function isMenuItem(item: MenuItem | MenuItemOptions): item is MenuItem {
     return 'elem' in item
 }
 
@@ -35,7 +35,7 @@ export class MenuItem {
         this.disabled = options.disabled === true
         this.children = options.children == null
             ? null
-            : options.children.map(c => isToolbarItem(c) ? c : new MenuItem(c))
+            : options.children.map(c => isMenuItem(c) ? c : new MenuItem(c))
 
         this.initElement()
     }

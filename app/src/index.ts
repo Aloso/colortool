@@ -216,8 +216,9 @@ updateSliders()
 
 const $toolbar = document.getElementById('toolbar') as HTMLElement
 const toolbar = new Toolbar([
-    new MenuItem({
+    {
         label: '<u>F</u>ile',
+        shortcut: 'alt+f',
         children: [
             {
                 label: 'Save as...',
@@ -232,7 +233,6 @@ const toolbar = new Toolbar([
                 },
             },
         ],
-        shortcut: 'alt+f',
-    }),
+    },
 ])
 $toolbar.append(toolbar.elem)
