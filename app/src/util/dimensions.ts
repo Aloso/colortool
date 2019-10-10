@@ -40,3 +40,22 @@ const mapping: (1 | -1)[][] = [
 export function getSignForSliderKeypress(pressed: Direction, sliderDir: Direction): 1 | -1 {
     return mapping[sliderDir][pressed]
 }
+
+export enum Corner {
+    TopLeft,
+    TopRight,
+    BottomLeft,
+    BottomRight,
+}
+
+export const cornerMapping = [
+    ['top', 'left'],
+    ['top', 'right'],
+    ['bottom', 'left'],
+    ['bottom', 'right'],
+]
+
+export interface Size {
+    width: number,
+    height: number,
+}

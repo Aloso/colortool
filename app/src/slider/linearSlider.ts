@@ -1,7 +1,7 @@
 import { NotNull } from '../util/myTypes'
 import { EventEmitter } from '../util/eventEmitter'
 import { Canvas } from '../canvas/canvas'
-import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/direction'
+import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/dimensions'
 import { Limit } from '../util/limit'
 
 export interface SliderOptions {

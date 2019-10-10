@@ -1,6 +1,6 @@
 import { NotNull } from '../util/myTypes'
 import { Canvas } from '../canvas/canvas'
-import { CircleInnerDir, CircleOuterDir } from '../util/direction'
+import { CircleInnerDir, CircleOuterDir } from '../util/dimensions'
 import { EventEmitter } from '../util/eventEmitter'
 import { Limit } from '../util/limit'
 
