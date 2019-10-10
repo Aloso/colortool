@@ -48,7 +48,12 @@ export enum Corner {
     BottomRight,
 }
 
-export const cornerMapping = [
+interface CornerMapping {
+    [0]: 'top' | 'bottom'
+    [1]: 'left' | 'right'
+}
+
+export const cornerMappings: { [key: number]: CornerMapping } = [
     ['top', 'left'],
     ['top', 'right'],
     ['bottom', 'left'],
