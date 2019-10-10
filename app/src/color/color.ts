@@ -10,5 +10,6 @@ export interface Color<Self extends Color<Self>> {
     hexWithAlpha: string
 
     setA(a: number): Self
+
     toString(): string
 }
