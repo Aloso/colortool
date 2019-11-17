@@ -88,12 +88,17 @@ export class MenuItem implements MenuComponent {
                 if (this.action != null) {
                     if (e.button === 0) this.action()
                     this.hideAll()
+                } else if (!this.child) {
+                    this.hideAll()
                 }
             })
 
             this.elem.addEventListener('keydown', e => {
                 if (e.key === 'Escape') {
                     this.parent?.pressEscape()
+                } else if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+                    this.leafMenuItem().parent.pressArrow(e.key)
+                    e.preventDefault()
                 }
             })
         }
@@ -123,6 +128,7 @@ export class MenuItem implements MenuComponent {
 
     public showChildren(options: { x: number, y: number }) {
         this.elem.classList.add('hovered')
+        this.elem.focus()
 
         if (this.child) {
             this.child.show(this, options, byId('menus', HTMLElement))

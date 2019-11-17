@@ -18,6 +18,8 @@ export interface ItemContainer {
 
     leaf(): MenuComponent | ItemContainer
     leafMenuItem(): MenuItem | null
+
+    pressArrow(key: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight'): void
 }
 
 export interface MenuComponent {

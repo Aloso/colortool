@@ -129,7 +129,10 @@ export class Menu implements ItemContainer {
         if (this.canHide) {
             this.children.forEach(item => item.hide())
             this.elem.remove()
+            this.selected = null
             this.visible = false
+
+            if (this.parent) this.parent.elem.focus()
         }
     }
 
@@ -153,6 +156,17 @@ export class Menu implements ItemContainer {
         }
     }
 
+    public selectChild(child: MenuComponent) {
+        if (child instanceof MenuItem) {
+            if (this.selected != null) {
+                this.selected.hide()
+            }
+            this.selected = child
+            this.selected.elem.classList.add('hovered')
+            this.selected.elem.focus()
+        }
+    }
+
     public leaveChild(child: MenuComponent) {
         if (child instanceof MenuItem) {
             if (child === this.selected) this.selected = null
@@ -166,6 +180,29 @@ export class Menu implements ItemContainer {
             leaf.parent.hide()
         } else {
             leaf.hide()
+        }
+    }
+
+    public pressArrow(key: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') {
+        if (!this.visible) return
+        let ix
+        switch (key) {
+            case 'ArrowUp':
+                ix = this.children.findIndex(ch => ch === this.selected)
+                if (ix === -1) ix = this.children.length
+                ix = (ix + this.children.length - 1) % this.children.length
+                this.selectChild(this.children[ix])
+                break
+            case 'ArrowDown':
+                ix = this.children.findIndex(ch => ch === this.selected)
+                ix = (ix + 1) % this.children.length
+                this.selectChild(this.children[ix])
+                break
+            case 'ArrowLeft':
+                break
+            case 'ArrowRight':
+                break
+
         }
     }
 

@@ -51,6 +51,8 @@ export class Toolbar implements ItemContainer {
         if (this.canHide) {
             this.elem.remove()
             this.items.forEach(item => item.hide())
+        } else if (this.selected) {
+            this.hideMenu({ target: null, force: true })
         }
     }
 
@@ -72,6 +74,16 @@ export class Toolbar implements ItemContainer {
         }
     }
 
+    public selectChild(child: MenuComponent) {
+        if (this.selected != null && child instanceof MenuItem) {
+            this.selected.hideChildren()
+            this.selected = child
+            this.selected.elem.focus()
+            this.selected.elem.classList.add('hovered')
+            console.log(this.selected)
+        }
+    }
+
     public leaveChild(child: MenuComponent) {
     }
 
@@ -80,6 +92,48 @@ export class Toolbar implements ItemContainer {
         leaf instanceof MenuItem
             ? leaf.parent.hide()
             : leaf.hide()
+    }
+
+    public pressArrow(key: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') {
+        if (this.selected == null) return
+        let ix
+        switch (key) {
+            case 'ArrowUp':
+                if (this.selected.child) {
+                    const child = this.selected.child
+                    if (!child.visible) {
+                        const bbox = this.selected.elem.getBoundingClientRect()
+                        this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+                    }
+                    child.enterChild(child.children[child.children.length - 1])
+                }
+                break
+            case 'ArrowDown':
+                if (this.selected.child) {
+                    const child = this.selected.child
+                    if (!child.visible) {
+                        const bbox = this.selected.elem.getBoundingClientRect()
+                        this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+                    }
+                    child.enterChild(child.children[0])
+                }
+                break
+            case 'ArrowLeft':
+                ix = this.items.findIndex(it => it === this.selected)
+                if (ix >= 0) {
+                    ix = (ix + this.items.length - 1) % this.items.length
+                    this.selectChild(this.items[ix])
+                }
+                break
+            case 'ArrowRight':
+                ix = this.items.findIndex(it => it === this.selected)
+                if (ix >= 0) {
+                    ix = (ix + 1) % this.items.length
+                    this.selectChild(this.items[ix])
+                }
+                break
+
+        }
     }
 
     public leaf(): MenuComponent | ItemContainer {
@@ -97,7 +151,6 @@ export class Toolbar implements ItemContainer {
         })
         item.elem.addEventListener('click', e => {
             if (e.button === 0) {
-                console.log('hi')
                 if (this.selected != null) {
                     this.selected.hideChildren()
                     this.selected = null
