@@ -2,7 +2,7 @@ import { MenuItem, MenuItemOptions } from './menuItem'
 import { EventEmitter } from '../util/eventEmitter'
 import { nextUid } from '../util/uid'
 import { Corner, cornerMappings, Size } from '../util/dimensions'
-import { isMenuComponent, ItemContainer, MenuComponent } from './itemContainer'
+import { ItemContainer, MenuComponent } from './itemContainer'
 import { Divider } from './divider'
 
 let clickedMenu: Menu | null = null
@@ -32,18 +32,10 @@ export class Menu implements ItemContainer {
     private _size: Size | null = null
 
     constructor(
-        items: (MenuComponent | MenuItemOptions | 'divider')[],
+        items: (MenuItemOptions | 'divider')[],
         private corner = Corner.TopLeft,
     ) {
-        this.items = items.map(c => {
-            if (c === 'divider') {
-                return new Divider(this)
-            } else if (isMenuComponent(c)) {
-                return c
-            } else {
-                return new MenuItem(this, c)
-            }
-        })
+        this.items = items.map(c => c === 'divider' ? new Divider(this) : new MenuItem(this, c))
         this.elem.className = 'menu'
         this.elem.append.apply(this.elem, this.items.map(it => it.elem))
     }

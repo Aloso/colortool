@@ -6,7 +6,7 @@ import { ItemContainer, MenuComponent } from './itemContainer'
 
 export interface MenuItemOptions {
     readonly label: string
-    readonly children?: (MenuComponent | MenuItemOptions | 'divider')[] | null
+    readonly children?: (MenuItemOptions | 'divider')[] | null
     readonly action?: () => void
     readonly shortcut?: string
     readonly displayShortcut?: string
@@ -100,7 +100,7 @@ export class MenuItem implements MenuComponent {
     public mouseenter() {
         if (this.child) {
             const bbox = this.elem.getBoundingClientRect()
-            this.showChildren({ x: bbox.right, y: bbox.top })
+            this.showChildren({ x: bbox.right, y: bbox.top - 5 })
         }
     }
 
