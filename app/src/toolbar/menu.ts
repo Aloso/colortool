@@ -2,6 +2,7 @@ import { MenuItem, MenuItemOrDiv } from './menuItem'
 import { Corner, cornerMappings, Size } from '../util/dimensions'
 import { ItemContainer, MenuComponent } from './itemContainer'
 import { Divider } from './divider'
+import { Toolbar } from './toolbar'
 
 let clickedMenu: Menu | null = null
 
@@ -199,8 +200,31 @@ export class Menu implements ItemContainer {
                 this.selectChild(this.children[ix])
                 break
             case 'ArrowLeft':
+                if (this.parent != null) {
+                    if (this.parent.parent instanceof Toolbar) {
+                        this.parent.parent.pressArrow('ArrowLeft')
+                    } else {
+                        this.hide()
+                    }
+                }
                 break
             case 'ArrowRight':
+                if (this.selected == null) this.selectChild(this.children[0])
+                if (this.selected == null) return
+                this.enterChild(this.selected)
+                const child = this.selected.child
+                if (child != null) {
+                    child.selectChild(child.children[0])
+                } else {
+                    let root: ItemContainer | MenuComponent | null = this
+                    do {
+                        root = root.parent
+                        if (root instanceof Toolbar) {
+                            root.pressArrow('ArrowRight')
+                            break
+                        }
+                    } while (root != null)
+                }
                 break
 
         }

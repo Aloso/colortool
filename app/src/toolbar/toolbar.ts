@@ -74,14 +74,19 @@ export class Toolbar implements ItemContainer {
         }
     }
 
-    public selectChild(child: MenuComponent) {
-        if (this.selected != null && child instanceof MenuItem) {
+    public forceEnterChild(child: MenuItem) {
+        if (this.selected != null) {
             this.selected.hideChildren()
-            this.selected = child
-            this.selected.elem.focus()
-            this.selected.elem.classList.add('hovered')
-            console.log(this.selected)
         }
+        this.selected = child
+
+        const bbox = this.selected.elem.getBoundingClientRect()
+        this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+
+        document.body.addEventListener('mousedown', this.hideCb)
+        document.body.addEventListener('touchstart', this.hideCb)
+        document.body.addEventListener('click', this.hideCb)
+        document.body.addEventListener('blur', this.hideCb)
     }
 
     public leaveChild(child: MenuComponent) {
@@ -97,6 +102,7 @@ export class Toolbar implements ItemContainer {
     public pressArrow(key: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') {
         if (this.selected == null) return
         let ix
+        let item
         switch (key) {
             case 'ArrowUp':
                 if (this.selected.child) {
@@ -105,7 +111,7 @@ export class Toolbar implements ItemContainer {
                         const bbox = this.selected.elem.getBoundingClientRect()
                         this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
                     }
-                    child.enterChild(child.children[child.children.length - 1])
+                    child.selectChild(child.children[child.children.length - 1])
                 }
                 break
             case 'ArrowDown':
@@ -115,21 +121,27 @@ export class Toolbar implements ItemContainer {
                         const bbox = this.selected.elem.getBoundingClientRect()
                         this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
                     }
-                    child.enterChild(child.children[0])
+                    child.selectChild(child.children[0])
                 }
                 break
             case 'ArrowLeft':
                 ix = this.items.findIndex(it => it === this.selected)
                 if (ix >= 0) {
                     ix = (ix + this.items.length - 1) % this.items.length
-                    this.selectChild(this.items[ix])
+                    item = this.items[ix]
+                    if (item instanceof MenuItem) {
+                        this.forceEnterChild(item)
+                    }
                 }
                 break
             case 'ArrowRight':
                 ix = this.items.findIndex(it => it === this.selected)
                 if (ix >= 0) {
                     ix = (ix + 1) % this.items.length
-                    this.selectChild(this.items[ix])
+                    item = this.items[ix]
+                    if (item instanceof MenuItem) {
+                        this.forceEnterChild(item)
+                    }
                 }
                 break
 
@@ -157,15 +169,7 @@ export class Toolbar implements ItemContainer {
 
                     if (this.previousActive instanceof HTMLElement) this.previousActive.focus()
                 } else if (item.child) {
-                    this.selected = item
-
-                    const bbox = this.selected.elem.getBoundingClientRect()
-                    this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
-
-                    document.body.addEventListener('mousedown', this.hideCb)
-                    document.body.addEventListener('touchstart', this.hideCb)
-                    document.body.addEventListener('click', this.hideCb)
-                    document.body.addEventListener('blur', this.hideCb)
+                    this.forceEnterChild(item)
                 }
             }
         })

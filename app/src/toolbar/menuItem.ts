@@ -3,6 +3,7 @@ import { bind, unbind } from 'mousetrap'
 import { Menu } from './menu'
 import { byId } from './util'
 import { ItemContainer, MenuComponent } from './itemContainer'
+import { Toolbar } from './toolbar'
 
 export interface MenuItemOptions {
     readonly label: string
@@ -113,8 +114,13 @@ export class MenuItem implements MenuComponent {
                     this.action()
                     e.preventDefault()
                 } else if (this.child) {
-                    const bbox = this.elem.getBoundingClientRect()
-                    this.showChildren({ x: bbox.right, y: bbox.top - 5 })
+                    if (this.parent.selected === this) {
+                        this.parent.leaveChild(this)
+                    } else if (this.parent instanceof Toolbar) {
+                        this.parent.forceEnterChild(this)
+                    } else {
+                        this.parent.enterChild(this)
+                    }
                     e.preventDefault()
                 }
             })

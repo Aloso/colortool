@@ -235,21 +235,6 @@ const toolbar = new Toolbar([
                     e?.preventDefault()
                 },
             },
-            {
-                label: 'Test',
-                children: [
-                    { label: 'A' },
-                    { label: 'B' },
-                ],
-            },
-        ],
-    },
-    {
-        label: 'Hi',
-        children: [
-            {
-                label: 'there!',
-            },
         ],
     },
 ])
