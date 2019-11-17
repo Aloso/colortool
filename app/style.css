@@ -8,7 +8,7 @@ body {
 
 @media (max-width: 1000px) {
     body {
-        padding: 12px;
+        padding: 42px 12px 12px;
     }
 }
 
@@ -329,16 +329,19 @@ input.tiny-input:focus {
 .tb-item .tb-item-text {
     flex-grow: 1;
     text-align: left;
+    line-height: 30px;
 }
 
 .tb-item .tb-short {
     opacity: 0.6;
     margin: 0 0 0 10px;
+    line-height: 30px;
 }
 
 .tb-item .tb-arrow-right {
     margin: 0 -3px 0 6px;
     font-size: 80%;
+    line-height: 30px;
 }
 
 .toolbar .tb-arrow-right {

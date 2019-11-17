@@ -229,7 +229,7 @@ const toolbar = new Toolbar([
             {
                 label: '<u>I</u>nvert',
                 shortcut: 'alt+i',
-                globalShortcut: 'ctrl+shift+i',
+                globalShortcut: 'i',
                 action(e?: Event) {
                     invert()
                     e?.preventDefault()
