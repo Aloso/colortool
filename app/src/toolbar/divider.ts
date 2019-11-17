@@ -12,4 +12,8 @@ export class Divider implements MenuComponent {
     }
 
     show() {}
+
+    leaf(): MenuComponent | ItemContainer {
+        return this
+    }
 }

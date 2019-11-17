@@ -16,11 +16,14 @@ export class Menu implements ItemContainer {
     public readonly elem = document.createElement('div')
     public parent: MenuComponent | null = null
 
-    public hoveredChild: MenuComponent | null = null
+    public visible = false
+    public selected: MenuItem | null = null
 
-    public readonly items: MenuComponent[]
+    public readonly children: MenuComponent[]
 
     private isInitialized = false
+
+    public readonly canHide = true
 
     isHovered = false
     private _size: Size | null = null
@@ -31,7 +34,7 @@ export class Menu implements ItemContainer {
     private y = 0
 
     constructor(items: MenuItemOrDiv[], private corner = Corner.TopLeft) {
-        this.items = items.map(c => c === 'divider' ? new Divider(this) : new MenuItem(this, c))
+        this.children = items.map(c => c === 'divider' ? new Divider(this) : new MenuItem(this, c))
     }
 
     public get size(): Size {
@@ -85,7 +88,7 @@ export class Menu implements ItemContainer {
             this.isInitialized = true
 
             this.elem.className = 'menu'
-            this.elem.append.apply(this.elem, this.items.map(it => it.elem))
+            this.elem.append.apply(this.elem, this.children.map(it => it.elem))
 
             const props = cornerMappings[this.corner]
             this.elem.style[props[1]] = this.x + 'px'
@@ -111,19 +114,23 @@ export class Menu implements ItemContainer {
         if (options == null || element == null) throw new Error('argument is missing')
         this.parent = parent
         this.initElement()
+        this.visible = true
 
         this.setPosition(options.x, options.y, this.corner, {
             width: window.innerWidth,
             height: window.innerHeight,
         })
 
-        this.items.forEach(item => item.show())
+        this.children.forEach(item => item.show())
         element.appendChild(this.elem)
     }
 
     public hide() {
-        this.items.forEach(item => item.hide())
-        this.elem.remove()
+        if (this.canHide) {
+            this.children.forEach(item => item.hide())
+            this.elem.remove()
+            this.visible = false
+        }
     }
 
     public hideAll() {
@@ -137,10 +144,10 @@ export class Menu implements ItemContainer {
 
     public enterChild(child: MenuComponent) {
         if (child instanceof MenuItem) {
-            if (this.hoveredChild != null) {
-                this.hoveredChild.hide()
+            if (this.selected != null) {
+                this.selected.hide()
             }
-            this.hoveredChild = child
+            this.selected = child
             const bbox = child.elem.getBoundingClientRect()
             child.showChildren({ x: bbox.right, y: bbox.top - 5 })
         }
@@ -148,12 +155,26 @@ export class Menu implements ItemContainer {
 
     public leaveChild(child: MenuComponent) {
         if (child instanceof MenuItem) {
-            if (child === this.hoveredChild) this.hoveredChild = null
+            if (child === this.selected) this.selected = null
             child.hideChildren()
         }
     }
 
     public pressEscape() {
-        this.hide()
+        const leaf = this.leaf()
+        if (leaf instanceof MenuItem) {
+            leaf.parent.hide()
+        } else {
+            leaf.hide()
+        }
+    }
+
+    public leaf(): MenuComponent | ItemContainer {
+        if (this.selected != null) return this.selected.leaf()
+        return this
+    }
+
+    public leafMenuItem(): MenuItem | null {
+        return this.selected?.leafMenuItem() ?? null
     }
 }

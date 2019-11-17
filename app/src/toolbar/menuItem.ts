@@ -10,6 +10,7 @@ export interface MenuItemOptions {
     readonly action?: () => void
     readonly shortcut?: string
     readonly displayShortcut?: string
+    readonly globalShortcut?: string
     readonly disabled?: boolean
 }
 
@@ -31,9 +32,14 @@ export class MenuItem implements MenuComponent {
     constructor(public parent: ItemContainer, options: MenuItemOptions) {
         this.label = options.label
         this.action = options.action ?? null
+        this.disabled = options.disabled === true
+
         this.shortcut = options.shortcut ?? null
         this.displayShortcut = options.displayShortcut ?? null
-        this.disabled = options.disabled === true
+        if (options.globalShortcut != null) {
+            if (options.displayShortcut == null) this.displayShortcut = options.globalShortcut
+            if (this.action) bind(options.globalShortcut, this.action)
+        }
 
         if (options.children != null && options.children.length) {
             this.child = new Menu(options.children ?? [])
@@ -86,7 +92,9 @@ export class MenuItem implements MenuComponent {
             })
 
             this.elem.addEventListener('keydown', e => {
-                if (e.key === 'Escape') this.parent?.pressEscape()
+                if (e.key === 'Escape') {
+                    this.parent?.pressEscape()
+                }
             })
         }
     }
@@ -128,5 +136,21 @@ export class MenuItem implements MenuComponent {
 
     public hideAll() {
         if (this.parent) this.parent.hideAll()
+    }
+
+    public leaf(): MenuComponent | ItemContainer {
+        if (this.child && this.child.visible) {
+            return this.child.leaf()
+        } else {
+            return this
+        }
+    }
+
+    public leafMenuItem(): MenuItem {
+        if (this.child && this.child.visible && this.child.selected != null) {
+            return this.child.selected.leafMenuItem()
+        } else {
+            return this
+        }
     }
 }

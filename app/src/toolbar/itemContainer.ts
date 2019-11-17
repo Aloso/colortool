@@ -1,7 +1,10 @@
+import { MenuItem } from './menuItem'
+
 export interface ItemContainer {
     readonly elem: HTMLElement
     parent: MenuComponent | null
-    hoveredChild: MenuComponent | null
+    selected: MenuItem | null
+    canHide: boolean
 
     show(parent: MenuComponent | null, options?: { x: number, y: number }, element?: HTMLElement): void
     hide(): void
@@ -12,6 +15,9 @@ export interface ItemContainer {
 
     enterChild(child: MenuComponent): void
     leaveChild(child: MenuComponent): void
+
+    leaf(): MenuComponent | ItemContainer
+    leafMenuItem(): MenuItem | null
 }
 
 export interface MenuComponent {
@@ -22,4 +28,6 @@ export interface MenuComponent {
     hide(): void
 
     hideAll(): void
+
+    leaf(): MenuComponent | ItemContainer
 }

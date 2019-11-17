@@ -12,7 +12,6 @@ import { array } from './util/myTypes'
 import { Palette } from './palette/palette'
 import { Toolbar } from './toolbar/toolbar'
 import { byId } from './toolbar/util'
-import { bind } from 'mousetrap'
 
 const space = (width: number = 5) => {
     const el = document.createElement('div')
@@ -222,88 +221,36 @@ function invert() {
 
 updateSliders()
 
-bind('ctrl+s', () => console.log('Save as!'))
-bind('ctrl+o', () => console.log('Open!'))
-bind('ctrl+shift+i', e => {
-    invert()
-    e.preventDefault()
-})
-
 const toolbar = new Toolbar([
-    {
-        label: '<u>F</u>ile',
-        shortcut: 'alt+f',
-        children: [
-            {
-                label: 'Save as...',
-                shortcut: 'ctrl+s',
-                displayShortcut: 'Ctrl+S',
-                action() {
-                    console.log('Save as!')
-                },
-            },
-            {
-                label: 'Open',
-                shortcut: 'ctrl+o',
-                displayShortcut: 'Ctrl+O',
-                action() {
-                    console.log('Open!')
-                },
-            },
-            'divider',
-            {
-                label: 'Open <u>r</u>ecent',
-                shortcut: 'alt+r',
-                children: [
-                    { label: '<span style="color: #ff0000">#ff0000</span>' },
-                    {
-                        label: '<span style="color: #00ff00">#00ff00</span>',
-                        children: [
-                            { label: 'Hello world!' },
-                        ],
-                    },
-                ],
-            },
-            {
-                label: 'Theme',
-                children: [
-                    { label: 'Dark' },
-                    { label: 'Bright' },
-                ],
-            },
-        ],
-    },
     {
         label: '<u>E</u>dit',
         shortcut: 'alt+e',
         children: [
             {
-                label: 'Undo',
-                displayShortcut: 'Ctrl+Z',
-                disabled: true,
-            },
-            {
-                label: 'Redo',
-                displayShortcut: 'Ctrl+Y',
-                disabled: true,
-            },
-            'divider',
-            {
                 label: '<u>I</u>nvert',
                 shortcut: 'alt+i',
-                displayShortcut: 'Ctrl+Shift+I',
-                action() {
+                globalShortcut: 'ctrl+shift+i',
+                action(e?: Event) {
                     invert()
+                    e?.preventDefault()
                 },
+            },
+            {
+                label: 'Test',
+                children: [
+                    { label: 'A' },
+                    { label: 'B' },
+                ],
             },
         ],
     },
-    'divider',
     {
-        label: 'Action!',
-        action() {
-            console.log('action triggered')
-        },
+        label: 'Hi',
+        children: [
+            {
+                label: 'there!',
+            },
+        ],
     },
 ])
 toolbar.show(null, undefined, byId('toolbar', HTMLElement))
