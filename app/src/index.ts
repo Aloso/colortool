@@ -289,7 +289,7 @@ const toolbar = new Toolbar([
             },
             'divider',
             {
-                label: 'Invert',
+                label: '<u>I</u>nvert',
                 shortcut: 'alt+i',
                 displayShortcut: 'Ctrl+Shift+I',
                 action() {

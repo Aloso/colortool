@@ -1,4 +1,4 @@
-import { MenuItem, MenuItemOptions } from './menuItem'
+import { MenuItem, MenuItemOrDiv } from './menuItem'
 import { ItemClickExpander } from './itemClickExpander'
 import { ItemContainer, MenuComponent } from './itemContainer'
 import { Divider } from './divider'
@@ -12,7 +12,7 @@ export class Toolbar implements ItemContainer {
 
     private readonly expander: ItemClickExpander
 
-    constructor(items: (MenuItemOptions | 'divider')[]) {
+    constructor(items: MenuItemOrDiv[]) {
         this.items = items.map(it => it === 'divider' ? new Divider(this) : new MenuItem(this, it))
         this.expander = new ItemClickExpander(this.items)
     }
@@ -43,7 +43,7 @@ export class Toolbar implements ItemContainer {
         this.expander.closeAll()
     }
 
-    pressEscape() {
+    public pressEscape() {
         this.hideAll()
     }
 }

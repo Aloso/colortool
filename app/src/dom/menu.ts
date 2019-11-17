@@ -1,4 +1,4 @@
-import { MenuItem, MenuItemOptions } from './menuItem'
+import { MenuItem, MenuItemOrDiv } from './menuItem'
 import { EventEmitter } from '../util/eventEmitter'
 import { nextUid } from '../util/uid'
 import { Corner, cornerMappings, Size } from '../util/dimensions'
@@ -31,10 +31,7 @@ export class Menu implements ItemContainer {
 
     private _size: Size | null = null
 
-    constructor(
-        items: (MenuItemOptions | 'divider')[],
-        private corner = Corner.TopLeft,
-    ) {
+    constructor(items: MenuItemOrDiv[], private corner = Corner.TopLeft) {
         this.items = items.map(c => c === 'divider' ? new Divider(this) : new MenuItem(this, c))
         this.elem.className = 'menu'
         this.elem.append.apply(this.elem, this.items.map(it => it.elem))
@@ -158,6 +155,6 @@ export class Menu implements ItemContainer {
     }
 
     public pressEscape() {
-
+        this.hide()
     }
 }

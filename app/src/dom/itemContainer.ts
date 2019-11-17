@@ -1,5 +1,3 @@
-import { MenuItemOptions } from './menuItem'
-
 export interface ItemContainer {
     readonly elem: HTMLElement
     parent: MenuComponent | null
@@ -20,8 +18,4 @@ export interface MenuComponent {
     hide(): void
 
     hideAll(): void
-}
-
-export function isMenuComponent(c: MenuComponent | MenuItemOptions): c is MenuComponent {
-    return 'elem' in c
 }

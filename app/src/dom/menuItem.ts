@@ -6,12 +6,14 @@ import { ItemContainer, MenuComponent } from './itemContainer'
 
 export interface MenuItemOptions {
     readonly label: string
-    readonly children?: (MenuItemOptions | 'divider')[] | null
+    readonly children?: MenuItemOrDiv[] | null
     readonly action?: () => void
     readonly shortcut?: string
     readonly displayShortcut?: string
     readonly disabled?: boolean
 }
+
+export type MenuItemOrDiv = MenuItemOptions | 'divider'
 
 export class MenuItem implements MenuComponent {
     public readonly elem = document.createElement('button')
@@ -95,6 +97,7 @@ export class MenuItem implements MenuComponent {
 
     public hide() {
         if (this.shortcut != null) unbind(this.shortcut)
+        this.hideChildren()
     }
 
     public mouseenter() {
