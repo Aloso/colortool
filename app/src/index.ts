@@ -11,7 +11,8 @@ import { SliderWithInput } from './slider/sliderWithInput'
 import { array } from './util/myTypes'
 import { Palette } from './palette/palette'
 import { Toolbar } from './dom/toolbar'
-import { MenuItem } from './dom/menuItem'
+import { byId } from './dom/helper'
+import { bind } from 'mousetrap'
 
 const space = (width: number = 5) => {
     const el = document.createElement('div')
@@ -70,9 +71,9 @@ const greenInput = upSliderInput('G', slider255Options)
 const blueInput = upSliderInput('B', slider255Options)
 const alphaInput = upSliderInput('A', slider100Options, true)
 
-const contentCircle = document.getElementById('cp-circle') as HTMLElement
-const contentSlider = document.getElementById('cp-slider') as HTMLElement
-const contentPalette = document.getElementById('cp-palette') as HTMLElement
+const contentCircle = byId('cp-circle', HTMLElement)
+const contentSlider = byId('cp-slider', HTMLElement)
+const contentPalette = byId('cp-palette', HTMLElement)
 
 contentCircle.append(circularSlider.elem)
 contentSlider.append(
@@ -212,9 +213,22 @@ function updateLivePalette() {
     livePalette.color = rgb
 }
 
+function invert() {
+    rgb = rgb.invert()
+    hsl = rgb.hsl
+    updateSliders()
+    updateLivePalette()
+}
+
 updateSliders()
 
-const $toolbar = document.getElementById('toolbar') as HTMLElement
+bind('ctrl+s', () => console.log('Save as!'))
+bind('ctrl+o', () => console.log('Open!'))
+bind('ctrl+shift+i', e => {
+    invert()
+    e.preventDefault()
+})
+
 const toolbar = new Toolbar([
     {
         label: '<u>F</u>ile',
@@ -222,17 +236,74 @@ const toolbar = new Toolbar([
         children: [
             {
                 label: 'Save as...',
+                shortcut: 'ctrl+s',
+                displayShortcut: 'Ctrl+S',
                 action() {
                     console.log('Save as!')
                 },
             },
             {
                 label: 'Open',
+                shortcut: 'ctrl+o',
+                displayShortcut: 'Ctrl+O',
                 action() {
                     console.log('Open!')
                 },
             },
+            'divider',
+            {
+                label: 'Open <u>r</u>ecent',
+                shortcut: 'alt+r',
+                children: [
+                    { label: '<span style="color: #ff0000">#ff0000</span>' },
+                    {
+                        label: '<span style="color: #00ff00">#00ff00</span>',
+                        children: [
+                            { label: 'Hello world!' },
+                        ],
+                    },
+                ],
+            },
+            {
+                label: 'Theme',
+                children: [
+                    { label: 'Dark' },
+                    { label: 'Bright' },
+                ],
+            },
         ],
     },
+    {
+        label: '<u>E</u>dit',
+        shortcut: 'alt+e',
+        children: [
+            {
+                label: 'Undo',
+                displayShortcut: 'Ctrl+Z',
+                disabled: true,
+            },
+            {
+                label: 'Redo',
+                displayShortcut: 'Ctrl+Y',
+                disabled: true,
+            },
+            'divider',
+            {
+                label: 'Invert',
+                shortcut: 'alt+i',
+                displayShortcut: 'Ctrl+Shift+I',
+                action() {
+                    invert()
+                },
+            },
+        ],
+    },
+    'divider',
+    {
+        label: 'Action!',
+        action() {
+            console.log('action triggered')
+        },
+    },
 ])
-$toolbar.append(toolbar.elem)
+toolbar.show(null, undefined, byId('toolbar', HTMLElement))

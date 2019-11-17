@@ -1,30 +1,51 @@
-import { MenuItem } from './menuItem'
+import { MenuItem, MenuItemOptions } from './menuItem'
 import { EventEmitter } from '../util/eventEmitter'
 import { nextUid } from '../util/uid'
 import { Corner, cornerMappings, Size } from '../util/dimensions'
+import { isMenuComponent, ItemContainer, MenuComponent } from './itemContainer'
+import { Divider } from './divider'
 
-export class Menu {
+let clickedMenu: Menu | null = null
+
+export function isMenuClicked(): boolean {
+    return clickedMenu != null
+}
+
+window.addEventListener('mouseup', () => setTimeout(() => clickedMenu = null))
+window.addEventListener('blur', () => setTimeout(() => clickedMenu = null))
+
+export class Menu implements ItemContainer {
     public readonly elem = document.createElement('div')
+    public parent: MenuComponent | null = null
+
+    public readonly items: MenuComponent[]
+
+    private isInitialized = false
 
     public readonly blur = new EventEmitter<void>()
     public readonly focus = new EventEmitter<void>()
     public readonly position = new EventEmitter<void>()
 
-    private _x: number
-    private _y: number
+    private x = 0
+    private y = 0
 
-    private corn = Corner.TopLeft
     private _size: Size | null = null
 
-    constructor(public readonly items: MenuItem[], x: number, y: number, corner?: Corner) {
-        this._x = x
-        this._y = y
-        if (corner != null) this.corn = corner
-        this.setPosition(this._x, this._y, this.corn, {
-            width: window.innerWidth,
-            height: window.innerHeight,
+    constructor(
+        items: (MenuComponent | MenuItemOptions | 'divider')[],
+        private corner = Corner.TopLeft,
+    ) {
+        this.items = items.map(c => {
+            if (c === 'divider') {
+                return new Divider(this)
+            } else if (isMenuComponent(c)) {
+                return c
+            } else {
+                return new MenuItem(this, c)
+            }
         })
-        this.initElement()
+        this.elem.className = 'menu'
+        this.elem.append.apply(this.elem, this.items.map(it => it.elem))
     }
 
     public get size(): Size {
@@ -41,64 +62,110 @@ export class Menu {
      * @param winSize - size of the window, or of the area within which the menu should appear
      */
     public setPosition(x: number, y: number, corner: Corner, winSize: Size) {
-        this._x = x
-        this._y = y
-        this.corn = corner
+        this.corner = corner
 
         const { width, height } = this.size
         // TODO maybe also modify left/top corner of `winSize`
 
-        switch (this.corn) {
+        switch (this.corner) {
             case Corner.TopLeft:
-                this._x = Math.min(this._x + width, winSize.width) - width
-                this._y = Math.min(this._y + height, winSize.height) - height
+                x = Math.min(x + width, winSize.width) - width
+                y = Math.min(y + height, winSize.height) - height
                 break
             case Corner.TopRight:
-                this._x = Math.max(this._x - width, 0) + width
-                this._y = Math.min(this._y + height, winSize.height) - height
+                x = Math.max(x - width, 0) + width
+                y = Math.min(y + height, winSize.height) - height
                 break
             case Corner.BottomLeft:
-                this._x = Math.min(this._x + width, winSize.width) - width
-                this._y = Math.max(this._y - height, 0) + height
+                x = Math.min(x + width, winSize.width) - width
+                y = Math.max(y - height, 0) + height
                 break
             case Corner.BottomRight:
-                this._x = Math.max(this._x - width, 0) + width
-                this._y = Math.max(this._y - height, 0) + height
+                x = Math.max(x - width, 0) + width
+                y = Math.max(y - height, 0) + height
                 break
         }
 
-        const props = cornerMappings[this.corn]
-        this.elem.style[props[0]] = this._x + 'px'
-        this.elem.style[props[1]] = this._y + 'px'
+        const props = cornerMappings[this.corner]
+        this.elem.style[props[1]] = x + 'px'
+        this.elem.style[props[0]] = y + 'px'
+
+        this.x = x
+        this.y = y
 
         this.position.emit()
     }
 
     private initElement() {
-        this.elem.className = 'menu'
+        if (!this.isInitialized) {
+            this.isInitialized = true
 
-        const props = cornerMappings[this.corn]
-        this.elem.style[props[0]] = this._x + 'px'
-        this.elem.style[props[1]] = this._y + 'px'
+            const props = cornerMappings[this.corner]
+            this.elem.style[props[1]] = this.x + 'px'
+            this.elem.style[props[0]] = this.y + 'px'
 
-        const children = this.items.map(it => it.elem)
-        this.elem.append.apply(this.elem, children)
+            let hoverId = -1
 
-        let hoverId = -1
+            this.elem.addEventListener('mouseenter', () => {
+                if (hoverId === -1) this.focus.emit()
+                hoverId = nextUid()
+            })
+            this.elem.addEventListener('mouseleave', () => {
+                hoverId = nextUid()
+                const thisId = hoverId
+                setTimeout(() => {
+                    if (hoverId === thisId) {
+                        hoverId = -1
+                        this.blur.emit()
+                    }
+                }, 300)
+            })
 
-        this.elem.addEventListener('mouseenter', () => {
-            if (hoverId === -1) this.focus.emit()
-            hoverId = nextUid()
-        })
-        this.elem.addEventListener('mouseleave', () => {
-            hoverId = nextUid()
-            const thisId = hoverId
-            setTimeout(() => {
-                if (hoverId === thisId) {
-                    hoverId = -1
-                    this.blur.emit()
+            for (const child of this.items) {
+                if (child instanceof MenuItem) {
+                    child.elem.addEventListener('mouseenter', () => {
+                        child.mouseenter()
+                    })
+
+                    child.elem.addEventListener('mouseleave', () => {
+                        child.mouseleave()
+                    })
                 }
-            }, 300)
+            }
+
+            this.elem.addEventListener('mousedown', () => clickedMenu = this)
+        }
+    }
+
+    public show(parent: MenuComponent | null, options?: { x: number, y: number }, element?: HTMLElement) {
+        if (options == null || element == null) throw new Error('argument is missing')
+        this.parent = parent
+        this.initElement()
+
+        this.setPosition(options.x, options.y, this.corner, {
+            width: window.innerWidth,
+            height: window.innerHeight,
         })
+
+        this.items.forEach(item => item.show())
+        element.appendChild(this.elem)
+    }
+
+    public hide() {
+        this.items.forEach(item => item.hide())
+        this.elem.remove()
+    }
+
+    public hideAll() {
+        if (this.parent) {
+            this.parent.hideAll()
+        } else {
+            // only if this is the root
+            this.hide()
+        }
+    }
+
+    public pressEscape() {
+
     }
 }

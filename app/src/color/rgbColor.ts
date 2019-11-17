@@ -95,6 +95,10 @@ export class RgbColor implements Color<RgbColor> {
     public toString(): string {
         return this.a === 100 ? this.rgbString : this.rgbaString
     }
+
+    public invert(): RgbColor {
+        return new RgbColor(255 - this.r, 255 - this.g, 255 - this.b)
+    }
 }
 
 export function isRgb(color: Color<any>): color is RgbColor {

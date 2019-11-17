@@ -1,91 +1,127 @@
-// TODO include mousetrap
+import { bind, unbind } from 'mousetrap'
 
-import { EventEmitter } from '../util/eventEmitter'
+import { Menu } from './menu'
+import { byId } from './helper'
+import { ItemContainer, MenuComponent } from './itemContainer'
 
 export interface MenuItemOptions {
     readonly label: string
-    readonly children?: (MenuItem | MenuItemOptions)[] | null
+    readonly children?: (MenuComponent | MenuItemOptions | 'divider')[] | null
     readonly action?: () => void
     readonly shortcut?: string
+    readonly displayShortcut?: string
     readonly disabled?: boolean
 }
 
-export function isMenuItem(item: MenuItem | MenuItemOptions): item is MenuItem {
-    return 'elem' in item
-}
-
-export class MenuItem {
+export class MenuItem implements MenuComponent {
     public readonly elem = document.createElement('button')
 
     public readonly label: string
-    public readonly children: MenuItem[] | null
     public readonly action: (() => void) | null
     public readonly shortcut: string | null
+    public readonly displayShortcut: string | null
     public readonly disabled: boolean
 
-    public readonly show = new EventEmitter<void>()
-    public readonly hide = new EventEmitter<void>()
+    public readonly child: Menu | null = null
 
-    private _openOnHover = false
+    private isInitialized = false
 
-    constructor(options: MenuItemOptions) {
+    constructor(public parent: ItemContainer, options: MenuItemOptions) {
         this.label = options.label
-        this.action = options.action || null
-        this.shortcut = options.shortcut == null ? null : options.shortcut
+        this.action = options.action ?? null
+        this.shortcut = options.shortcut ?? null
+        this.displayShortcut = options.displayShortcut ?? null
         this.disabled = options.disabled === true
-        this.children = options.children == null
-            ? null
-            : options.children.map(c => isMenuItem(c) ? c : new MenuItem(c))
 
-        this.initElement()
+        if (options.children != null && options.children.length) {
+            this.child = new Menu(options.children ?? [])
+        }
     }
 
     private initElement() {
-        this.elem.className = `tb-item tb-${this.children == null ? 'button' : 'list'}`
-        this.elem.innerHTML = this.label
-        if (this.shortcut != null) this.elem.title = this.shortcut
-        if (this.disabled) this.elem.disabled = true
+        if (!this.isInitialized) {
+            this.isInitialized = true
 
-        if (this.action != null) this.elem.addEventListener('click', this.action)
+            this.elem.className = `tb-item tb-${this.child ? 'button' : 'list'}`
+            if (this.disabled) this.elem.disabled = true
 
-        if (this.children != null) {
-            this.initChildren(this.children)
+            const elem = document.createElement('span')
+            elem.className = 'tb-item-text'
+            elem.innerHTML = this.label
+            this.elem.append(elem)
+
+            if (this.displayShortcut != null) {
+                const shortcutElem = document.createElement('span')
+                shortcutElem.className = 'tb-short'
+                shortcutElem.innerHTML = this.displayShortcut
+                this.elem.append(shortcutElem)
+            }
+
+            if (this.child) {
+                const arrowElem = document.createElement('span')
+                arrowElem.className = 'tb-arrow-right'
+                arrowElem.innerHTML = '⯈'
+                this.elem.append(arrowElem)
+            }
+
+            this.elem.addEventListener('click', e => {
+                if (this.action != null) {
+                    if (e.button === 0) this.action()
+                    this.hideAll()
+                }
+            })
+
+            this.elem.addEventListener('keydown', e => {
+                if (e.key === 'Escape') this.parent?.pressEscape()
+            })
         }
     }
 
-    private initChildren(children: MenuItem[]) {
-        for (const child of children) {
-            child.elem.addEventListener('click', e => {
-                if (e.button === 0) {
-                    if (this.action != null) this.action()
-                    this.showChild(child)
-                }
-            })
+    public show() {
+        this.initElement()
 
-            child.elem.addEventListener('mouseenter', e => {
-                if (e.button === 0) {
-                    this.showChild(child)
-                }
-            })
-
-            child.elem.addEventListener('mouseleave', e => {
-                if (e.button === 0) {
-                    if (this.action != null) this.action()
-                    if (this.children != null) this.showChild(child)
+        if (this.shortcut != null) {
+            bind(this.shortcut, e => {
+                if (this.action != null) {
+                    this.action()
+                    e.preventDefault()
+                } else if (this.child) {
+                    this.mouseenter()
+                    e.preventDefault()
                 }
             })
         }
     }
 
-    private showChild(child: MenuItem) {
-
+    public hide() {
+        if (this.shortcut != null) unbind(this.shortcut)
     }
 
-    public get openOnHover(): boolean {
-        return this._openOnHover
+    public mouseenter() {
+        if (this.child) {
+            const bbox = this.elem.getBoundingClientRect()
+            this.showChildren({ x: bbox.right, y: bbox.top })
+        }
     }
 
-    public set openOnHover(openOnHover: boolean) {
-        this._openOnHover = openOnHover
+    public mouseleave() {
+        this.hideChildren()
+    }
+
+    public showChildren(options: { x: number, y: number }) {
+        this.elem.classList.add('hovered')
+
+        if (this.child) {
+            this.child.show(this, options, byId('menus', HTMLElement))
+        }
+    }
+
+    public hideChildren() {
+        this.elem.classList.remove('hovered')
+        if (this.child != null) this.child.hide()
+    }
+
+    public hideAll() {
+        if (this.parent) this.parent.hideAll()
     }
 }

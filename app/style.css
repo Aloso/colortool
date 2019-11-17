@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 20px;
+    padding: 50px 20px 20px;
     font-family: Roboto, 'Segoe UI', 'Noto Sans', -apple-system, system-ui, BlinkMacSystemFont, 'Droid Sans', sans-serif;
     background-color: #222222;
     color: white;
@@ -290,4 +290,117 @@ input.tiny-input:focus {
 .v-slider-outer > .tiny-input {
     width: 30px;
     height: 20px;
+}
+
+
+/************* MENUS *************/
+
+#toolbar {
+    position: fixed;
+    box-sizing: border-box;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 0;
+    background-color: inherit;
+    box-shadow: 0 0 0 1px rgba(127, 127, 127, 0.3);
+    z-index: 1;
+}
+
+.toolbar {
+    display: flex;
+    height: 30px;
+    line-height: 30px;
+    flex-direction: row;
+    padding: 0 5px;
+}
+
+.tb-item {
+    display: flex;
+    font-size: inherit;
+    background-color: transparent;
+    color: white;
+    border: none;
+    margin: 0;
+    padding: 0 8px;
+    font-family: inherit;
+}
+
+.tb-item .tb-item-text {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.tb-item .tb-short {
+    opacity: 0.6;
+    margin: 0 0 0 10px;
+}
+
+.tb-item .tb-arrow-right {
+    margin: 0 -3px 0 6px;
+    font-size: 80%;
+}
+
+.toolbar .tb-arrow-right {
+    display: none;
+}
+
+/*noinspection CssOverwrittenProperties*/
+.toolbar > hr {
+    display: block;
+    margin: 0 5px;
+    border: 1px solid rgba(127, 127, 127, 0.5);
+    border-width: 0 1px 0 0;
+}
+
+.tb-item:hover:not(:disabled) {
+    background-color: rgba(127, 127, 127, 0.3);
+}
+
+.tb-item:focus {
+    outline: none;
+}
+
+.tb-item.hovered:not(:disabled) {
+    background-color: rgb(30, 90, 141);
+    color: white;
+}
+
+.tb-item:disabled {
+    color: #999999;
+}
+
+#menus {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    pointer-events: none;
+}
+
+.menu {
+    pointer-events: all;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    background: #252525;
+    padding: 5px 0;
+    border-radius: 3px;
+    max-height: calc(95vh - 30px);
+    overflow: auto;
+    box-shadow: 0 0 0 1px rgba(127, 127, 127, 0.5);
+}
+
+/*noinspection CssOverwrittenProperties*/
+.menu > hr {
+    display: block;
+    margin: 5px 0;
+    border: 1px solid rgba(127, 127, 127, 0.5);
+    border-width: 1px 0 0 0;
+}
+
+.menu .tb-item {
+    line-height: 30px;
 }
