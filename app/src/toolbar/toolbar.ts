@@ -6,6 +6,7 @@ import { Divider } from './divider'
 export class Toolbar implements ItemContainer {
     public readonly elem = document.createElement('div')
     private readonly items: MenuComponent[]
+    public hoveredChild: MenuComponent | null = null
     public parent: MenuComponent | null = null
 
     private isInitialized = false
@@ -41,6 +42,14 @@ export class Toolbar implements ItemContainer {
 
     public hideAll() {
         this.expander.closeAll()
+        this.hoveredChild = null
+    }
+
+    public enterChild(child: MenuComponent) {
+        this.hoveredChild = child
+    }
+
+    public leaveChild(child: MenuComponent) {
     }
 
     public pressEscape() {

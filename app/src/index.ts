@@ -10,8 +10,8 @@ import { HslColor } from './color/hslColor'
 import { SliderWithInput } from './slider/sliderWithInput'
 import { array } from './util/myTypes'
 import { Palette } from './palette/palette'
-import { Toolbar } from './dom/toolbar'
-import { byId } from './dom/helper'
+import { Toolbar } from './toolbar/toolbar'
+import { byId } from './toolbar/util'
 import { bind } from 'mousetrap'
 
 const space = (width: number = 5) => {

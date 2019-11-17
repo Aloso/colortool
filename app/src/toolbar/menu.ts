@@ -1,6 +1,4 @@
 import { MenuItem, MenuItemOrDiv } from './menuItem'
-import { EventEmitter } from '../util/eventEmitter'
-import { nextUid } from '../util/uid'
 import { Corner, cornerMappings, Size } from '../util/dimensions'
 import { ItemContainer, MenuComponent } from './itemContainer'
 import { Divider } from './divider'
@@ -18,23 +16,22 @@ export class Menu implements ItemContainer {
     public readonly elem = document.createElement('div')
     public parent: MenuComponent | null = null
 
+    public hoveredChild: MenuComponent | null = null
+
     public readonly items: MenuComponent[]
 
     private isInitialized = false
 
-    public readonly blur = new EventEmitter<void>()
-    public readonly focus = new EventEmitter<void>()
-    public readonly position = new EventEmitter<void>()
+    isHovered = false
+    private _size: Size | null = null
+
+    public hoveredMenuItem: MenuItem | null = null
 
     private x = 0
     private y = 0
 
-    private _size: Size | null = null
-
     constructor(items: MenuItemOrDiv[], private corner = Corner.TopLeft) {
         this.items = items.map(c => c === 'divider' ? new Divider(this) : new MenuItem(this, c))
-        this.elem.className = 'menu'
-        this.elem.append.apply(this.elem, this.items.map(it => it.elem))
     }
 
     public get size(): Size {
@@ -81,46 +78,30 @@ export class Menu implements ItemContainer {
 
         this.x = x
         this.y = y
-
-        this.position.emit()
     }
 
     private initElement() {
         if (!this.isInitialized) {
             this.isInitialized = true
 
+            this.elem.className = 'menu'
+            this.elem.append.apply(this.elem, this.items.map(it => it.elem))
+
             const props = cornerMappings[this.corner]
             this.elem.style[props[1]] = this.x + 'px'
             this.elem.style[props[0]] = this.y + 'px'
 
-            let hoverId = -1
-
             this.elem.addEventListener('mouseenter', () => {
-                if (hoverId === -1) this.focus.emit()
-                hoverId = nextUid()
+                this.isHovered = true
             })
             this.elem.addEventListener('mouseleave', () => {
-                hoverId = nextUid()
-                const thisId = hoverId
                 setTimeout(() => {
-                    if (hoverId === thisId) {
-                        hoverId = -1
-                        this.blur.emit()
+                    const isChildHovered = this.hoveredMenuItem?.child?.isHovered ?? false
+                    if (!isChildHovered) {
+                        this.isHovered = false
                     }
-                }, 300)
+                })
             })
-
-            for (const child of this.items) {
-                if (child instanceof MenuItem) {
-                    child.elem.addEventListener('mouseenter', () => {
-                        child.mouseenter()
-                    })
-
-                    child.elem.addEventListener('mouseleave', () => {
-                        child.mouseleave()
-                    })
-                }
-            }
 
             this.elem.addEventListener('mousedown', () => clickedMenu = this)
         }
@@ -151,6 +132,24 @@ export class Menu implements ItemContainer {
         } else {
             // only if this is the root
             this.hide()
+        }
+    }
+
+    public enterChild(child: MenuComponent) {
+        if (child instanceof MenuItem) {
+            if (this.hoveredChild != null) {
+                this.hoveredChild.hide()
+            }
+            this.hoveredChild = child
+            const bbox = child.elem.getBoundingClientRect()
+            child.showChildren({ x: bbox.right, y: bbox.top - 5 })
+        }
+    }
+
+    public leaveChild(child: MenuComponent) {
+        if (child instanceof MenuItem) {
+            if (child === this.hoveredChild) this.hoveredChild = null
+            child.hideChildren()
         }
     }
 

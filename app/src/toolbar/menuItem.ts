@@ -1,7 +1,7 @@
 import { bind, unbind } from 'mousetrap'
 
 import { Menu } from './menu'
-import { byId } from './helper'
+import { byId } from './util'
 import { ItemContainer, MenuComponent } from './itemContainer'
 
 export interface MenuItemOptions {
@@ -66,6 +66,18 @@ export class MenuItem implements MenuComponent {
                 this.elem.append(arrowElem)
             }
 
+            this.elem.addEventListener('mouseenter', () => {
+                this.parent.enterChild(this)
+            })
+
+            this.elem.addEventListener('mouseleave', () => {
+                setTimeout(() => {
+                    if (!this.child || !this.child.isHovered) {
+                        this.parent.leaveChild(this)
+                    }
+                })
+            })
+
             this.elem.addEventListener('click', e => {
                 if (this.action != null) {
                     if (e.button === 0) this.action()
@@ -88,7 +100,8 @@ export class MenuItem implements MenuComponent {
                     this.action()
                     e.preventDefault()
                 } else if (this.child) {
-                    this.mouseenter()
+                    const bbox = this.elem.getBoundingClientRect()
+                    this.showChildren({ x: bbox.right, y: bbox.top - 5 })
                     e.preventDefault()
                 }
             })
@@ -97,17 +110,6 @@ export class MenuItem implements MenuComponent {
 
     public hide() {
         if (this.shortcut != null) unbind(this.shortcut)
-        this.hideChildren()
-    }
-
-    public mouseenter() {
-        if (this.child) {
-            const bbox = this.elem.getBoundingClientRect()
-            this.showChildren({ x: bbox.right, y: bbox.top - 5 })
-        }
-    }
-
-    public mouseleave() {
         this.hideChildren()
     }
 

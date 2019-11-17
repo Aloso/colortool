@@ -6,12 +6,17 @@ import { NotNull } from './myTypes'
  * This is similar to a `Stream` in dart or an `Observable` in rxjs.
  */
 export class EventEmitter<T extends NotNull> {
-    private listeners: ((event: T) => void)[] = []
+    private listeners: (((event: T) => void) & { once?: true })[] = []
 
     /**
      * Subscribe to events
      */
     public on(listener: (event: T) => void) {
+        this.listeners.push(listener)
+    }
+
+    public once(listener: ((event: T) => void) & { once?: true }) {
+        listener.once = true
         this.listeners.push(listener)
     }
 
@@ -31,8 +36,13 @@ export class EventEmitter<T extends NotNull> {
      * Broadcast an event to all listeners
      */
     public emit(event: T) {
-        for (const listener of this.listeners) {
+        for (let i = 0; i < this.listeners.length; i++) {
+            const listener = this.listeners[i]
             listener(event)
+            if (listener.once) {
+                this.listeners.splice(i, 1)
+                i--
+            }
         }
     }
 }

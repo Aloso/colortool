@@ -1,7 +1,7 @@
 import { MenuItem } from './menuItem'
 import { MenuComponent } from './itemContainer'
 import { isMenuClicked } from './menu'
-import { hasAncestor } from './helper'
+import { hasAncestor } from './util'
 
 export class ItemClickExpander {
     private openItem: MenuItem | null = null
