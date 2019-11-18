@@ -1,4 +1,5 @@
-import { ItemContainer, MenuComponent } from './itemContainer'
+import { ItemContainer} from './types/itemContainer'
+import { MenuComponent } from './types/menuComponent'
 
 export class Divider implements MenuComponent {
     public elem = document.createElement('hr')

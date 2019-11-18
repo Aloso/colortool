@@ -1,4 +1,5 @@
-import { MenuItem } from './menuItem'
+import { MenuItem } from '../menuItem'
+import { MenuComponent } from './menuComponent'
 
 export interface ItemContainer {
     readonly elem: HTMLElement
@@ -13,8 +14,8 @@ export interface ItemContainer {
 
     pressEscape(): void
 
-    enterChild(child: MenuComponent): void
-    leaveChild(child: MenuComponent): void
+    mouseEnterChild(child: MenuComponent): void
+    mouseLeaveChild(child: MenuComponent): void
 
     leaf(): MenuComponent | ItemContainer
     leafMenuItem(): MenuItem | null
@@ -22,14 +23,3 @@ export interface ItemContainer {
     pressArrow(key: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight'): void
 }
 
-export interface MenuComponent {
-    readonly elem: HTMLElement
-    parent: ItemContainer
-
-    show(): void
-    hide(): void
-
-    hideAll(): void
-
-    leaf(): MenuComponent | ItemContainer
-}

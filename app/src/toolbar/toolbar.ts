@@ -1,8 +1,9 @@
 import { MenuItem, MenuItemOrDiv } from './menuItem'
-import { ItemContainer, MenuComponent } from './itemContainer'
+import { ItemContainer} from './types/itemContainer'
 import { Divider } from './divider'
 import { isMenuClicked } from './menu'
 import { hasAncestor } from './util'
+import { MenuComponent } from './types/menuComponent'
 
 export class Toolbar implements ItemContainer {
     public readonly elem = document.createElement('div')
@@ -61,7 +62,7 @@ export class Toolbar implements ItemContainer {
         this.selected = null
     }
 
-    public enterChild(child: MenuComponent) {
+    public mouseEnterChild(child: MenuComponent) {
         if (this.selected != null && child instanceof MenuItem) {
             this.selected.hideChildren()
             this.selected = child
@@ -89,7 +90,7 @@ export class Toolbar implements ItemContainer {
         document.body.addEventListener('blur', this.hideCb)
     }
 
-    public leaveChild(child: MenuComponent) {
+    public mouseLeaveChild(child: MenuComponent) {
     }
 
     public pressEscape() {

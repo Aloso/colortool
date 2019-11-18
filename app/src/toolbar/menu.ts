@@ -1,8 +1,9 @@
 import { MenuItem, MenuItemOrDiv } from './menuItem'
 import { Corner, cornerMappings, Size } from '../util/dimensions'
-import { ItemContainer, MenuComponent } from './itemContainer'
+import { ItemContainer} from './types/itemContainer'
 import { Divider } from './divider'
 import { Toolbar } from './toolbar'
+import { MenuComponent } from './types/menuComponent'
 
 let clickedMenu: Menu | null = null
 
@@ -146,7 +147,7 @@ export class Menu implements ItemContainer {
         }
     }
 
-    public enterChild(child: MenuComponent) {
+    public mouseEnterChild(child: MenuComponent) {
         if (child instanceof MenuItem) {
             if (this.selected != null) {
                 this.selected.hide()
@@ -168,7 +169,7 @@ export class Menu implements ItemContainer {
         }
     }
 
-    public leaveChild(child: MenuComponent) {
+    public mouseLeaveChild(child: MenuComponent) {
         if (child instanceof MenuItem) {
             if (child === this.selected) this.selected = null
             child.hideChildren()
@@ -211,7 +212,7 @@ export class Menu implements ItemContainer {
             case 'ArrowRight':
                 if (this.selected == null) this.selectChild(this.children[0])
                 if (this.selected == null) return
-                this.enterChild(this.selected)
+                this.mouseEnterChild(this.selected)
                 const child = this.selected.child
                 if (child != null) {
                     child.selectChild(child.children[0])

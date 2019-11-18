@@ -2,8 +2,9 @@ import { bind, unbind } from 'mousetrap'
 
 import { Menu } from './menu'
 import { byId } from './util'
-import { ItemContainer, MenuComponent } from './itemContainer'
+import { ItemContainer} from './types/itemContainer'
 import { Toolbar } from './toolbar'
+import { MenuComponent } from './types/menuComponent'
 
 export interface MenuItemOptions {
     readonly label: string
@@ -74,13 +75,13 @@ export class MenuItem implements MenuComponent {
             }
 
             this.elem.addEventListener('mouseenter', () => {
-                this.parent.enterChild(this)
+                this.parent.mouseEnterChild(this)
             })
 
             this.elem.addEventListener('mouseleave', () => {
                 setTimeout(() => {
                     if (!this.child || !this.child.isHovered) {
-                        this.parent.leaveChild(this)
+                        this.parent.mouseLeaveChild(this)
                     }
                 })
             })
@@ -115,11 +116,11 @@ export class MenuItem implements MenuComponent {
                     e.preventDefault()
                 } else if (this.child) {
                     if (this.parent.selected === this) {
-                        this.parent.leaveChild(this)
+                        this.parent.mouseLeaveChild(this)
                     } else if (this.parent instanceof Toolbar) {
                         this.parent.forceEnterChild(this)
                     } else {
-                        this.parent.enterChild(this)
+                        this.parent.mouseEnterChild(this)
                     }
                     e.preventDefault()
                 }
