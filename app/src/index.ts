@@ -89,7 +89,7 @@ contentSlider.append(
 let rgb = new RgbColor(255, 0, 0)
 let hsl = rgb.hsl
 
-const livePalette = new PaletteCell(rgb)
+const livePalette = new PaletteCell(rgb, true)
 livePalette.elem.className += ' big round'
 livePalette.elem.style.position = 'absolute'
 contentCircle.prepend(livePalette.elem)

@@ -10,7 +10,7 @@ export class PaletteCell {
 
     public readonly colorChanged = new EventEmitter<RgbColor>()
 
-    constructor(color: Color<any>) {
+    constructor(color: Color<any>, private readonly withTransparency = false) {
         this._color = color.rgb
 
         this.initElement()
@@ -35,6 +35,8 @@ export class PaletteCell {
     }
 
     private updateColor() {
-        this.inner.style.backgroundColor = this._color.toString()
+        this.inner.style.backgroundColor = this.withTransparency
+            ? this._color.rgbaString
+            : this._color.toString()
     }
 }

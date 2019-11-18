@@ -89,7 +89,7 @@ export class RgbColor implements Color<RgbColor> {
     }
 
     public get rgbaString(): string {
-        return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})`
+        return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a / 100})`
     }
 
     public toString(): string {
