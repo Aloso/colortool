@@ -270,7 +270,7 @@ button::-moz-focus-inner {
     flex-grow: 1;
     border-radius: 2px;
     box-shadow: 0 0 2px #00000028;
-    transition: .12s;
+    transition: transform .12s, box-shadow .12s;
 }
 
 .palette:focus .palette-field > div {
