@@ -84,10 +84,10 @@ export class Toolbar implements ItemContainer {
         const bbox = this.selected.elem.getBoundingClientRect()
         this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
 
-        document.body.addEventListener('mousedown', this.hideCb)
-        document.body.addEventListener('touchstart', this.hideCb)
-        document.body.addEventListener('click', this.hideCb)
-        document.body.addEventListener('blur', this.hideCb)
+        window.addEventListener('mousedown', this.hideCb)
+        window.addEventListener('touchstart', this.hideCb)
+        window.addEventListener('click', this.hideCb)
+        window.addEventListener('blur', this.hideCb)
     }
 
     public mouseLeaveChild(child: MenuComponent) {
@@ -189,9 +189,9 @@ export class Toolbar implements ItemContainer {
             if (this.previousActive instanceof HTMLElement) this.previousActive.focus()
         }
 
-        document.body.removeEventListener('mousedown', this.hideCb)
-        document.body.removeEventListener('click', this.hideCb)
-        document.body.removeEventListener('touchstart', this.hideCb)
-        document.body.removeEventListener('blur', this.hideCb)
+        window.removeEventListener('mousedown', this.hideCb)
+        window.removeEventListener('click', this.hideCb)
+        window.removeEventListener('touchstart', this.hideCb)
+        window.removeEventListener('blur', this.hideCb)
     }
 }
