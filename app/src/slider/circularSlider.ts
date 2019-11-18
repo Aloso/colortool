@@ -160,6 +160,8 @@ export class CircularSlider<S extends NotNull> {
             }
         })
         window.addEventListener('mouseup', () => isPressed = false)
+        window.addEventListener('touchend', () => isPressed = false)
+        window.addEventListener('touchcancel', () => isPressed = false)
         window.addEventListener('blur', () => isPressed = false)
     }
 
