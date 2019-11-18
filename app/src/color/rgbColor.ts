@@ -97,7 +97,7 @@ export class RgbColor implements Color<RgbColor> {
     }
 
     public invert(): RgbColor {
-        return new RgbColor(255 - this.r, 255 - this.g, 255 - this.b)
+        return new RgbColor(255 - this.r, 255 - this.g, 255 - this.b, this.a)
     }
 }
 
