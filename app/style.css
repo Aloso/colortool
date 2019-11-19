@@ -51,6 +51,7 @@ button::-moz-focus-inner {
 
 #content {
     display: flex;
+    justify-content: center;
     flex-wrap: wrap;
 }
 
@@ -64,6 +65,18 @@ button::-moz-focus-inner {
     height: 15px;
 }
 
+#cp-circle, #cp-slider {
+    display: flex;
+    justify-content: center;
+}
+
+#cp-circle-inner {
+    width: 339px;
+    height: 339px;
+    max-width: 90vw;
+    max-height: 90vw;
+}
+
 @media (max-width: 1150px) {
     #cp-div2 {
         flex-basis: 100%;
@@ -73,17 +86,7 @@ button::-moz-focus-inner {
     }
 }
 
-@media (max-width: 1000px) {
-    #cp-slider {
-        width: auto;
-        flex-grow: 1;
-    }
-}
-
-@media (max-width: 650px) {
-    #cp-circle, #cp-slider {
-        text-align: center;
-    }
+@media (max-width: 530px) {
     #cp-div1 {
         flex-basis: 100%;
     }
@@ -106,6 +109,7 @@ button::-moz-focus-inner {
 .slider {
     position: relative;
     box-sizing: border-box;
+    flex-grow: 1;
     display: inline-flex;
     width: 30px;
     height: 30px;
@@ -115,16 +119,16 @@ button::-moz-focus-inner {
 }
 
 .h-slider {
-    width: 299px;
+    min-width: 220px;
 }
 
 .v-slider {
-    height: 299px;
+    min-height: 220px;
 }
 
 .c-slider {
-    width: 339px;
-    height: 339px;
+    width: 100%;
+    height: 100%;
 }
 
 /************* SLIDER CANVAS *************/
@@ -253,7 +257,8 @@ button::-moz-focus-inner {
     align-items: stretch;
     box-sizing: border-box;
     height: 29px;
-    width: calc(6.667% - 2px);
+    width: 5px;
+    flex-grow: 1;
     border: none;
     padding: 0;
     margin: 1px;
@@ -262,8 +267,10 @@ button::-moz-focus-inner {
 }
 
 .palette-field.big {
-    width: 55px;
-    height: 55px;
+    width: 16%;
+    height: 16%;
+    margin-bottom: -100%;
+    float: left;
 }
 
 .palette-field > div {
@@ -300,7 +307,6 @@ input.tiny-input {
     padding: 0 0 1px 0;
     text-align: center;
     font-size: 0.75em;
-    flex-grow: 1;
     transition: .12s;
 }
 

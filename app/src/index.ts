@@ -1,17 +1,17 @@
 import { Canvas } from './canvas/canvas'
 import { roundHueGradient } from './canvas/roundHue'
-import { LinearSlider, SliderOptions } from './slider/linearSlider'
 import { linearGradient } from './canvas/linearGradientCanvas'
+import { LinearSlider, SliderOptions } from './slider/linearSlider'
 import { CircularSlider } from './slider/circularSlider'
+import { SliderWithInput } from './slider/sliderWithInput'
 import { RgbColor } from './color/rgbColor'
+import { HslColor } from './color/hslColor'
 import { Direction } from './util/dimensions'
 import { PaletteCell } from './palette/paletteCell'
-import { HslColor } from './color/hslColor'
-import { SliderWithInput } from './slider/sliderWithInput'
-import { array } from './util/myTypes'
 import { Palette } from './palette/palette'
 import { Toolbar } from './toolbar/toolbar'
 import { byId } from './toolbar/util'
+import { array } from './util/myTypes'
 
 const space = (width: number = 5) => {
     const el = document.createElement('div')
@@ -70,7 +70,7 @@ const greenInput = upSliderInput('G', slider255Options)
 const blueInput = upSliderInput('B', slider255Options)
 const alphaInput = upSliderInput('A', slider100Options, true)
 
-const contentCircle = byId('cp-circle', HTMLElement)
+const contentCircle = byId('cp-circle-inner', HTMLElement)
 const contentSlider = byId('cp-slider', HTMLElement)
 const contentPalette = byId('cp-palette', HTMLElement)
 
@@ -91,7 +91,6 @@ let hsl = rgb.hsl
 
 const livePalette = new PaletteCell(rgb, true)
 livePalette.elem.className += ' big round'
-livePalette.elem.style.position = 'absolute'
 contentCircle.prepend(livePalette.elem)
 
 const $palette = document.createElement('div')
