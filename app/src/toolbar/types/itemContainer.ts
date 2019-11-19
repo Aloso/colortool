@@ -1,5 +1,7 @@
 import { MenuItem } from '../menuItem'
 import { MenuComponent } from './menuComponent'
+import { Direction } from './direction'
+import { Box } from './box'
 
 export interface ItemContainer {
     readonly elem: HTMLElement
@@ -7,10 +9,13 @@ export interface ItemContainer {
     selected: MenuItem | null
     canHide: boolean
 
-    show(parent: MenuComponent | null, options?: { x: number, y: number }, element?: HTMLElement): void
+    show(parent: MenuComponent | null, element?: HTMLElement): void
     hide(): void
 
     hideAll(): void
+
+    getBox(): Box
+    getPreferredDirection(): Direction
 
     pressEscape(): void
 

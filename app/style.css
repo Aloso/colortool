@@ -416,6 +416,7 @@ input.tiny-input:focus {
     border-radius: 3px;
     max-height: calc(95vh - 30px);
     overflow: auto;
+    scrollbar-width: thin;
     box-shadow: 0 0 0 1px rgba(127, 127, 127, 0.5);
 }
 

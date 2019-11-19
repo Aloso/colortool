@@ -4,6 +4,8 @@ import { Divider } from './divider'
 import { isMenuClicked } from './menu'
 import { hasAncestor } from './util'
 import { MenuComponent } from './types/menuComponent'
+import { Direction } from './types/direction'
+import { Box } from './types/box'
 
 export class Toolbar implements ItemContainer {
     public readonly elem = document.createElement('div')
@@ -40,7 +42,7 @@ export class Toolbar implements ItemContainer {
         }
     }
 
-    public show(parent: MenuComponent | null, options: undefined, element?: HTMLElement) {
+    public show(parent: MenuComponent | null, element?: HTMLElement) {
         this.parent = parent
         this.initElement()
 
@@ -62,6 +64,14 @@ export class Toolbar implements ItemContainer {
         this.selected = null
     }
 
+    public getBox(): Box {
+        return Box.fromElem(this.elem)
+    }
+
+    public getPreferredDirection(): Direction {
+        return Direction.Down
+    }
+
     public mouseEnterChild(child: MenuComponent) {
         if (this.selected != null && child instanceof MenuItem) {
             this.selected.hideChildren()
@@ -69,8 +79,7 @@ export class Toolbar implements ItemContainer {
             this.selected.elem.focus()
 
             if (child.action == null && child.child) {
-                const bbox = this.selected.elem.getBoundingClientRect()
-                this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+                this.selected.showChildren()
             }
         }
     }
@@ -81,8 +90,7 @@ export class Toolbar implements ItemContainer {
         }
         this.selected = child
 
-        const bbox = this.selected.elem.getBoundingClientRect()
-        this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+        this.selected.showChildren()
 
         window.addEventListener('mousedown', this.hideCb)
         window.addEventListener('touchstart', this.hideCb)
@@ -109,8 +117,7 @@ export class Toolbar implements ItemContainer {
                 if (this.selected.child) {
                     const child = this.selected.child
                     if (!child.visible) {
-                        const bbox = this.selected.elem.getBoundingClientRect()
-                        this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+                        this.selected.showChildren()
                     }
                     child.selectChild(child.children[child.children.length - 1])
                 }
@@ -119,8 +126,7 @@ export class Toolbar implements ItemContainer {
                 if (this.selected.child) {
                     const child = this.selected.child
                     if (!child.visible) {
-                        const bbox = this.selected.elem.getBoundingClientRect()
-                        this.selected.showChildren({ x: bbox.left, y: bbox.bottom })
+                        this.selected.showChildren()
                     }
                     child.selectChild(child.children[0])
                 }

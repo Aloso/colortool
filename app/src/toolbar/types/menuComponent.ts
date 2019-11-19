@@ -1,4 +1,5 @@
 import { ItemContainer } from './itemContainer'
+import { Box } from './box'
 
 export interface MenuComponent {
     readonly elem: HTMLElement
@@ -9,6 +10,8 @@ export interface MenuComponent {
     hide(): void
 
     hideAll(): void
+
+    getBox(): Box
 
     leaf(): MenuComponent | ItemContainer
 }

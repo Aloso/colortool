@@ -1,9 +1,10 @@
 import { MenuItem, MenuItemOrDiv } from './menuItem'
-import { Corner, cornerMappings, Size } from '../util/dimensions'
-import { ItemContainer} from './types/itemContainer'
+import { ItemContainer } from './types/itemContainer'
 import { Divider } from './divider'
 import { Toolbar } from './toolbar'
 import { MenuComponent } from './types/menuComponent'
+import { Direction, directionMin, inverse, pivot } from './types/direction'
+import { Box } from './types/box'
 
 let clickedMenu: Menu | null = null
 
@@ -27,62 +28,16 @@ export class Menu implements ItemContainer {
 
     public readonly canHide = true
 
-    isHovered = false
-    private _size: Size | null = null
+    public isHovered = false
 
     public hoveredMenuItem: MenuItem | null = null
 
-    private x = 0
-    private y = 0
-
-    constructor(items: MenuItemOrDiv[], private corner = Corner.TopLeft) {
+    constructor(items: MenuItemOrDiv[]) {
         this.children = items.map(c => c === 'divider' ? new Divider(this) : new MenuItem(this, c))
     }
 
-    public get size(): Size {
-        if (this._size != null) return this._size
-        this._size = this.elem.getBoundingClientRect()
-        return this._size
-    }
-
-    /**
-     * Sets the position of the menu. It ensures that the menu is inside of the `winSize` dimensions.
-     * @param x - x coordinate of the corner
-     * @param y - y coordinate of the corner
-     * @param corner - specifies which corner is positioned
-     * @param winSize - size of the window, or of the area within which the menu should appear
-     */
-    public setPosition(x: number, y: number, corner: Corner, winSize: Size) {
-        this.corner = corner
-
-        const { width, height } = this.size
-        // TODO maybe also modify left/top corner of `winSize`
-
-        switch (this.corner) {
-            case Corner.TopLeft:
-                x = Math.min(x + width, winSize.width) - width
-                y = Math.min(y + height, winSize.height) - height
-                break
-            case Corner.TopRight:
-                x = Math.max(x - width, 0) + width
-                y = Math.min(y + height, winSize.height) - height
-                break
-            case Corner.BottomLeft:
-                x = Math.min(x + width, winSize.width) - width
-                y = Math.max(y - height, 0) + height
-                break
-            case Corner.BottomRight:
-                x = Math.max(x - width, 0) + width
-                y = Math.max(y - height, 0) + height
-                break
-        }
-
-        const props = cornerMappings[this.corner]
-        this.elem.style[props[1]] = x + 'px'
-        this.elem.style[props[0]] = y + 'px'
-
-        this.x = x
-        this.y = y
+    public getBox(): Box {
+        return Box.fromElem(this.elem)
     }
 
     private initElement() {
@@ -91,10 +46,6 @@ export class Menu implements ItemContainer {
 
             this.elem.className = 'menu'
             this.elem.append.apply(this.elem, this.children.map(it => it.elem))
-
-            const props = cornerMappings[this.corner]
-            this.elem.style[props[1]] = this.x + 'px'
-            this.elem.style[props[0]] = this.y + 'px'
 
             this.elem.addEventListener('mouseenter', () => {
                 this.isHovered = true
@@ -112,19 +63,68 @@ export class Menu implements ItemContainer {
         }
     }
 
-    public show(parent: MenuComponent | null, options?: { x: number, y: number }, element?: HTMLElement) {
-        if (options == null || element == null) throw new Error('argument is missing')
+    public show(parent: MenuComponent | null, element?: HTMLElement) {
+        if (parent == null || element == null) throw new Error('argument is missing')
         this.parent = parent
         this.initElement()
         this.visible = true
 
-        this.setPosition(options.x, options.y, this.corner, {
-            width: window.innerWidth,
-            height: window.innerHeight,
-        })
-
         this.children.forEach(item => item.show())
         element.appendChild(this.elem)
+
+        this.setPosition(this.parent)
+    }
+
+    private setPosition(parent: MenuComponent) {
+        const size = this.getBox()
+        let parentBox = parent.getBox()
+        const docBox = Box.fromDocument()
+
+        const dir = parent.parent.getPreferredDirection()
+        const dirInv = inverse(dir)
+
+        const required = Math.abs(size[dir] - size[dirInv])
+        const space = Math.abs(docBox[dir] - parentBox[dir])
+        const altSpace = Math.abs(docBox[dirInv] - parentBox[dirInv])
+
+        const direction = (required > space && altSpace > space) ? dirInv : dir
+        if (direction === Direction.Right || direction === Direction.Left) {
+            parentBox = parentBox.addPadding(0, 5)
+        }
+
+        const pDir = pivot(dir)
+        const pDirInv = inverse(pDir)
+        const pDirMin = directionMin(pDir)
+        const pDirMax = inverse(pDirMin)
+
+        const pRequired = Math.abs(size[pDir] - size[pDirInv])
+        const pSpace = docBox[pDirMax] - parentBox[pDirMin]
+
+        const pStart = (pRequired <= pSpace) ? parentBox[pDirMin] : Math.max(0, docBox[pDirMax] - pRequired)
+
+        let x: number
+        let y: number
+        switch (direction) {
+            case Direction.Left:
+                x = Math.max(0, parentBox.left - required)
+                y = pStart
+                break
+            case Direction.Up:
+                x = pStart
+                y = Math.max(0, parentBox.top - required)
+                break
+            case Direction.Right:
+                x = parentBox.right
+                y = pStart
+                break
+            case Direction.Down:
+                x = pStart
+                y = parentBox.bottom
+                break
+        }
+
+        this.elem.style.left = x + 'px'
+        this.elem.style.top = y + 'px'
     }
 
     public hide() {
@@ -133,6 +133,9 @@ export class Menu implements ItemContainer {
             this.elem.remove()
             this.selected = null
             this.visible = false
+
+            this.elem.style.left = '0px'
+            this.elem.style.top = '0px'
 
             if (this.parent) this.parent.elem.focus()
         }
@@ -147,14 +150,17 @@ export class Menu implements ItemContainer {
         }
     }
 
+    public getPreferredDirection(): Direction {
+        return Direction.Right
+    }
+
     public mouseEnterChild(child: MenuComponent) {
         if (child instanceof MenuItem) {
             if (this.selected != null) {
                 this.selected.hide()
             }
             this.selected = child
-            const bbox = child.elem.getBoundingClientRect()
-            child.showChildren({ x: bbox.right, y: bbox.top - 5 })
+            child.showChildren()
         }
     }
 

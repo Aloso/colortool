@@ -5,6 +5,7 @@ import { byId } from './util'
 import { ItemContainer} from './types/itemContainer'
 import { Toolbar } from './toolbar'
 import { MenuComponent } from './types/menuComponent'
+import { Box } from './types/box'
 
 export interface MenuItemOptions {
     readonly label: string
@@ -133,12 +134,12 @@ export class MenuItem implements MenuComponent {
         this.hideChildren()
     }
 
-    public showChildren(options: { x: number, y: number }) {
+    public showChildren() {
         this.elem.classList.add('hovered')
         this.elem.focus()
 
         if (this.child) {
-            this.child.show(this, options, byId('menus', HTMLElement))
+            this.child.show(this, byId('menus', HTMLElement))
         }
     }
 
@@ -149,6 +150,10 @@ export class MenuItem implements MenuComponent {
 
     public hideAll() {
         if (this.parent) this.parent.hideAll()
+    }
+
+    public getBox(): Box {
+        return Box.fromElem(this.elem)
     }
 
     public leaf(): MenuComponent | ItemContainer {

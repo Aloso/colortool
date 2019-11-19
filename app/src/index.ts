@@ -238,4 +238,4 @@ const toolbar = new Toolbar([
         ],
     },
 ])
-toolbar.show(null, undefined, byId('toolbar', HTMLElement))
+toolbar.show(null, byId('toolbar', HTMLElement))
