@@ -99,7 +99,7 @@ contentCircle.prepend(livePalette.elem)
 
 const $palette = document.createElement('div')
 $palette.setAttribute('style', 'display: inline-block; vertical-align: top')
-const paletteHues = [0, 22, 38, 60, 83, 120, 150, 180, 195, 217, 240, 260, 280, 300, 330]
+const paletteHues = [0, 22, 38, 60, 83, 120, 150, 180, 197, 219, 240, 260, 280, 300, 330]
 
 const makeCell = (hue: number, sat: number, lum: number) =>
     new PaletteCell(new HslColor(hue, sat, 100 - lum))
