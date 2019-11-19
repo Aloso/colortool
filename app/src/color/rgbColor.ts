@@ -19,6 +19,28 @@ export class RgbColor implements Color<RgbColor> {
         )
     }
 
+    public static fromHex(s: string): RgbColor | null {
+        s = s.trim()
+        if (s.length >= 4 && s[0] === '#') {
+            if (/^#[0-9a-fA-F]*$/.test(s)) {
+                const hex = s.substr(1)
+                if (hex.length === 6) {
+                    const r = Number.parseInt(hex.substr(0, 2), 16)
+                    const g = Number.parseInt(hex.substr(2, 2), 16)
+                    const b = Number.parseInt(hex.substr(4, 2), 16)
+                    return new RgbColor(r, g, b)
+                } else if (hex.length === 8) {
+                    const r = Number.parseInt(hex.substr(0, 2), 16)
+                    const g = Number.parseInt(hex.substr(2, 2), 16)
+                    const b = Number.parseInt(hex.substr(4, 2), 16)
+                    const a = Number.parseInt(hex.substr(6, 2), 16)
+                    return new RgbColor(r, g, b, a / 2.55)
+                }
+            }
+        }
+        return null
+    }
+
     public setR(r: number): RgbColor {
         const rValid = Math.max(0, Math.min(255, r)) | 0
         return new RgbColor(rValid, this.g, this.b, this.a)
@@ -79,8 +101,9 @@ export class RgbColor implements Color<RgbColor> {
     }
 
     public get hexWithAlpha(): string {
-        const a = this.a * 2.55 | 0
-        const hexStr = ((this.r << 24) + (this.g << 16) + (this.b << 8) + a).toString(16)
+        const a = (this.a * 2.55999999) | 0
+        const r = this.r * 16777216 // 2^24
+        const hexStr = (r + (this.g << 16) + (this.b << 8) + a).toString(16)
         return '#00000000'.substr(0, 9 - hexStr.length) + hexStr
     }
 

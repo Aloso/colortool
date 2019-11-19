@@ -54,20 +54,29 @@ button::-moz-focus-inner {
     justify-content: center;
     align-content: center;
     flex-wrap: wrap;
-    min-height: calc(100vh - 100px);
+    min-height: calc(100vh - 70px);
 }
 
 #cp-palette {
-    width: 100%;
     max-width: 465px;
 }
 
-#cp-div1, #cp-div2 {
+#cp-div1, #cp-div2, #cp-div3 {
     width: 15px;
     height: 15px;
 }
 
-#cp-circle, #cp-slider {
+#cp-div3 {
+    height: 40px;
+    width: 100%;
+}
+
+#cp-texts {
+    font-size: 1.2em;
+}
+
+
+#cp-circle, #cp-slider, #cp-palette {
     display: flex;
     justify-content: center;
 }
@@ -99,9 +108,6 @@ button::-moz-focus-inner {
     #cp-slider {
         width: auto;
         flex-grow: 1;
-    }
-    #cp-palette {
-        max-width: none;
     }
 }
 
@@ -297,25 +303,34 @@ button::-moz-focus-inner {
 }
 
 
-/************* TINY INPUT *************/
+/************* INPUT *************/
 
-input.tiny-input {
+input[type=text], input[type=number] {
     box-sizing: border-box;
     border: none;
     border-bottom: 1px solid #555;
     background-color: transparent;
     color: white;
     margin: 0;
-    padding: 0 0 1px 0;
-    text-align: center;
-    font-size: 0.75em;
+    padding: 1px 0;
     transition: .12s;
+    font-size: 100%;
+    font-family: inherit;
 }
 
-input.tiny-input:focus {
+input:focus {
     padding-bottom: 0;
-    border-bottom: 2px solid #3285ff;
+    border-bottom: 2px solid #33b5ff;
     outline: none;
+}
+
+input.tiny-input {
+    text-align: center;
+    font-size: 0.75em;
+}
+
+input.small-input {
+    width: 6em;
 }
 
 .v-slider-outer > .tiny-input {

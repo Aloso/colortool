@@ -1,9 +1,11 @@
 import { Canvas } from './canvas/canvas'
 import { roundHueGradient } from './canvas/roundHue'
 import { linearGradient } from './canvas/linearGradientCanvas'
-import { LinearSlider, SliderOptions } from './slider/linearSlider'
-import { CircularSlider } from './slider/circularSlider'
-import { SliderWithInput } from './slider/sliderWithInput'
+import { LinearSlider, SliderOptions } from './input/linearSlider'
+import { CircularSlider } from './input/circularSlider'
+import { SliderWithInput } from './input/sliderWithInput'
+import { StringInput } from './input/stringInput'
+import { Color } from './color/color'
 import { RgbColor } from './color/rgbColor'
 import { HslColor } from './color/hslColor'
 import { Direction } from './util/dimensions'
@@ -54,6 +56,10 @@ function upSliderInput(label: string, options: SliderOptions, transparent = fals
     return new SliderWithInput(slider, label)
 }
 
+function textHexInput(label: string, value: Color<any>): StringInput {
+    return new StringInput(label, value.rgb.hex)
+}
+
 const circularCanvas = new Canvas(circleSize, circleSize, roundHueGradient(15), undefined)
 const circularSlider = new CircularSlider(circularCanvas, {
     min: 0,
@@ -66,6 +72,11 @@ const circularSlider = new CircularSlider(circularCanvas, {
     startAngle: 0,
 })
 
+
+let rgb = new RgbColor(255, 0, 0)
+let hsl = rgb.hsl
+
+
 const hueInput = upSliderInput('H', slider359Options)
 const satInput = upSliderInput('S', slider100Options)
 const lumInput = upSliderInput('L', slider100Options)
@@ -73,10 +84,12 @@ const redInput = upSliderInput('R', slider255Options)
 const greenInput = upSliderInput('G', slider255Options)
 const blueInput = upSliderInput('B', slider255Options)
 const alphaInput = upSliderInput('A', slider100Options, true)
+const hexInput = textHexInput('Hex: ', rgb)
 
 const contentCircle = byId('cp-circle-inner', HTMLElement)
 const contentSlider = byId('cp-slider', HTMLElement)
 const contentPalette = byId('cp-palette', HTMLElement)
+const contentTexts = byId('cp-texts', HTMLElement)
 
 contentCircle.append(circularSlider.elem)
 contentSlider.append(
@@ -88,10 +101,11 @@ contentSlider.append(
     blueInput.elem, space(15),
     alphaInput.elem,
 )
+contentTexts.append(
+    hexInput.label,
+    hexInput.elem,
+)
 
-
-let rgb = new RgbColor(255, 0, 0)
-let hsl = rgb.hsl
 
 const livePalette = new PaletteCell(rgb, true)
 livePalette.elem.className += ' big round'
@@ -171,13 +185,12 @@ alphaInput.input.on(v => {
     rgb = rgb.setA(v)
     hsl = hsl.setA(v)
     updateLivePalette()
+    hexInput.value = showHexInAlpha ? rgb.hexWithAlpha : rgb.hex
 })
 
 const hueIndices = [0, 1, 2, 3, 4, 5, 6]
 
 function updateSliders() {
-    const n1 = performance.now()
-
     hueInput.canvasState = hueIndices.map(i => hsl.setHue(i * 60).hex)
     satInput.canvasState = [hsl.setSat(0).hex, hsl.setSat(100).hex]
     lumInput.canvasState = ['#000', hsl.setLum(50).hex, '#fff']
@@ -199,8 +212,7 @@ function updateSliders() {
     alphaInput.value = rgb.a
     circularSlider.value = { inner: hsl.sat, outer: hsl.hue }
 
-    const n4 = performance.now()
-    if (n4 - n1 > 8) console.log(`${(n4 - n1).toFixed(0)} ms !!!`)
+    hexInput.value = showHexInAlpha ? rgb.hexWithAlpha : rgb.hex
 }
 
 function setColorsFromRgb(newRgb: RgbColor) {
@@ -222,6 +234,28 @@ function invert() {
     updateLivePalette()
 }
 
+hexInput.elem.className = 'small-input'
+hexInput.elem.style.fontFamily = '"Roboto Mono", Consolas, "Noto Mono", Hack, "Droid Sans Mono"'
+hexInput.input.on(s => {
+    console.log(s)
+    const color = RgbColor.fromHex(s)
+    console.log(color)
+    if (color != null) {
+        rgb = color
+        hsl = rgb.hsl
+        updateSliders()
+        updateLivePalette()
+    }
+})
+
+let showHexInAlpha = false
+
+function toggleShowHexInAlpha() {
+    showHexInAlpha = !showHexInAlpha
+    hexInput.value = showHexInAlpha ? rgb.hexWithAlpha : rgb.hex
+}
+
+
 updateSliders()
 
 const toolbar = new Toolbar([
@@ -235,6 +269,15 @@ const toolbar = new Toolbar([
                 globalShortcut: 'i',
                 action(e?: Event) {
                     invert()
+                    e?.preventDefault()
+                },
+            },
+            {
+                label: 'Show hex with <u>a</u>lpha',
+                shortcut: 'alt+a',
+                globalShortcut: 'a',
+                action(e?: Event) {
+                    toggleShowHexInAlpha()
                     e?.preventDefault()
                 },
             },
