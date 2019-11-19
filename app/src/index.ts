@@ -119,7 +119,7 @@ const paletteHues = [0, 22, 38, 60, 83, 120, 150, 180, 197, 219, 240, 260, 280, 
 const makeCell = (hue: number, sat: number, lum: number) =>
     new PaletteCell(new HslColor(hue, sat, 100 - lum))
 
-const makePalette = (sat: number) => [18, 30, 50, 65, 78]
+const makePalette = (sat: number) => [20, 35, 50, 65, 80]
     .map(lum => paletteHues.map(hue => makeCell(hue, sat, lum)))
 
 const paletteRows: PaletteCell[][] = [
