@@ -40,8 +40,12 @@ const slider100Options: SliderOptions = {
     step: 1,
 }
 
+const isSmallScreen: boolean = Math.min(window.innerWidth, window.innerHeight) < 400
+const sliderSize = isSmallScreen ? 200 : 299
+const circleSize = isSmallScreen ? 226 : 339
+
 function upSliderCanvas(): Canvas<string[]> {
-    return new Canvas(30, 299, linearGradient(Direction.Up), ['transparent', 'transparent'])
+    return new Canvas(30, sliderSize, linearGradient(Direction.Up), ['transparent', 'transparent'])
 }
 
 function upSliderInput(label: string, options: SliderOptions, transparent = false): SliderWithInput<string[]> {
@@ -50,7 +54,7 @@ function upSliderInput(label: string, options: SliderOptions, transparent = fals
     return new SliderWithInput(slider, label)
 }
 
-const circularCanvas = new Canvas(339, 339, roundHueGradient(15), undefined)
+const circularCanvas = new Canvas(circleSize, circleSize, roundHueGradient(15), undefined)
 const circularSlider = new CircularSlider(circularCanvas, {
     min: 0,
     max: 100,
