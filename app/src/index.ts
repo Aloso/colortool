@@ -45,6 +45,7 @@ const slider100Options: SliderOptions = {
 const isSmallScreen: boolean = Math.min(window.innerWidth, window.innerHeight) < 400
 const sliderSize = isSmallScreen ? 200 : 299
 const circleSize = isSmallScreen ? 226 : 339
+const padding = isSmallScreen ? 10 : 15
 
 function upSliderCanvas(): Canvas<string[]> {
     return new Canvas(30, sliderSize, linearGradient(Direction.Up), ['transparent', 'transparent'])
@@ -60,7 +61,7 @@ function textHexInput(label: string, value: Color<any>): StringInput {
     return new StringInput(label, value.rgb.hex)
 }
 
-const circularCanvas = new Canvas(circleSize, circleSize, roundHueGradient(15), undefined)
+const circularCanvas = new Canvas(circleSize, circleSize, roundHueGradient(padding), undefined)
 const circularSlider = new CircularSlider(circularCanvas, {
     min: 0,
     max: 100,
