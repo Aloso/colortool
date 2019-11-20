@@ -21,6 +21,7 @@ It's not finished yet, but it already supports:
 
 ## Planned features
 
+  - HSV color palette
   - Create your own palette
   - Download your palette/share it via link
   - Batch transformation: Manipulate colors within a text
