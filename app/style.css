@@ -313,6 +313,7 @@ input[type=text], input[type=number] {
     color: white;
     margin: 0;
     padding: 1px 0;
+    border-radius: 0;
     transition: .12s;
     font-size: 100%;
     font-family: inherit;
@@ -330,7 +331,7 @@ input.tiny-input {
 }
 
 input.small-input {
-    width: 6em;
+    width: 9ch;
 }
 
 .v-slider-outer > .tiny-input {
