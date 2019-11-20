@@ -45,6 +45,7 @@ button::-moz-focus-inner {
 
 .tiny-input[type=number] {
     -moz-appearance: textfield;
+    width: 3ch;
 }
 
 
@@ -242,6 +243,15 @@ button::-moz-focus-inner {
     height: 20px;
     line-height: 1em;
     text-align: center;
+}
+
+.h-slider-outer > .label {
+    font-size: 0.85em;
+    align-self: center;
+}
+
+.h-slider-outer > .slider {
+    margin: 0 10px;
 }
 
 
