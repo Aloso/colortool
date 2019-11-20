@@ -33,11 +33,11 @@ export class SliderWithInput<S extends NotNull> {
 
     private initElement() {
         this.slider.input.on(v => {
-            this.number.value = '' + v
+            this.number.value = '' + (v | 0)
             this.input.emit(v)
         })
         this.slider.change.on(v => {
-            this.number.value = '' + v
+            this.number.value = '' + (v | 0)
             this.change.emit(v)
         })
 
@@ -48,7 +48,7 @@ export class SliderWithInput<S extends NotNull> {
     private initNumber(label: string) {
         this.number.setAttribute('type', 'number')
         this.number.className = 'tiny-input'
-        this.number.value = '' + this.slider.value
+        this.number.value = '' + (this.slider.value | 0)
 
         const id = `slider-${label}-${nextUid()}`
         this.number.id = id

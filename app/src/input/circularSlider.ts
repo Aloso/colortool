@@ -8,7 +8,6 @@ export interface CircularInnerOptions {
     min: number
     max: number
     initial?: number
-    rounding?: (n: number) => number
     direction?: CircleInnerDir
 }
 
@@ -16,7 +15,6 @@ export interface CircularOuterOptions {
     min: number
     max: number
     initial?: number
-    rounding?: (n: number) => number
     startAngle?: number
     direction?: CircleOuterDir
 }
@@ -26,14 +24,9 @@ export interface CircularValues {
     inner: number
 }
 
-const identity = (n: number) => n
-
 export class CircularSlider<S extends NotNull> {
     private readonly oVal: Limit
     private readonly iVal: Limit
-
-    private readonly oRounding: (n: number) => number
-    private readonly iRounding: (n: number) => number
 
     private readonly oDirection: CircleOuterDir
     private readonly iDirection: CircleInnerDir
@@ -50,9 +43,6 @@ export class CircularSlider<S extends NotNull> {
         if (inner.initial == null) inner.initial = inner.min
         if (outer.initial == null) outer.initial = outer.min
 
-        this.iRounding = inner.rounding || identity
-        this.oRounding = outer.rounding || identity
-
         this.iVal = Limit.fromErr(inner.initial, inner.min, inner.max)
         this.oVal = Limit.fromErr(outer.initial, outer.min, outer.max)
 
@@ -65,16 +55,9 @@ export class CircularSlider<S extends NotNull> {
         this.makeValueVisible()
     }
 
-    public get value(): CircularValues {
-        return {
-            outer: this.oVal.get(),
-            inner: this.iVal.get(),
-        }
-    }
-
     public set value(v: CircularValues) {
-        const iChanged = this.iVal.set(this.iRounding(v.inner))
-        const oChanged = this.oVal.set(this.oRounding(v.outer))
+        const iChanged = this.iVal.set(v.inner)
+        const oChanged = this.oVal.set(v.outer)
         if (iChanged || oChanged) {
             this.change.emit(v)
             this.makeValueVisible()
@@ -82,8 +65,8 @@ export class CircularSlider<S extends NotNull> {
     }
 
     public set valueRelative(v: CircularValues) {
-        const iChanged = this.iVal.setRelative(v.inner, this.iRounding)
-        const oChanged = this.oVal.setRelative(v.outer, this.oRounding)
+        const iChanged = this.iVal.setRelative(v.inner)
+        const oChanged = this.oVal.setRelative(v.outer)
 
         if (iChanged || oChanged) {
             this.makeValueVisible()

@@ -61,10 +61,6 @@ export class Canvas<S extends NotNull> {
         this.elem.height = Math.round(h / dpr)
     }
 
-    public get state(): S {
-        return this._state
-    }
-
     public set state(s: S) {
         this._state = s
         this.redraw(true)

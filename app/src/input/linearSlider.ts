@@ -8,18 +8,14 @@ export interface SliderOptions {
     min: number,
     max: number,
     initial?: number,
-    rounding?: (n: number) => number,
     smallStep?: number,
     step?: number,
     direction?: Direction,
 }
 
-const identity = (n: number) => n
-
 export class LinearSlider<S extends NotNull> {
     private readonly val: Limit
 
-    public readonly rounding: (n: number) => number
     public readonly step: number
     public readonly smallStep: number
     public readonly direction: Direction
@@ -35,7 +31,6 @@ export class LinearSlider<S extends NotNull> {
         if (options.initial == null) options.initial = options.min
         this.val = Limit.fromErr(options.initial, options.min, options.max)
 
-        this.rounding = options.rounding || identity
         this.step = options.step || 1
         this.smallStep = options.smallStep || this.step
 
@@ -51,7 +46,7 @@ export class LinearSlider<S extends NotNull> {
     }
 
     public set value(v: number) {
-        if (this.val.set(this.rounding(v))) {
+        if (this.val.set(v)) {
             this.change.emit(this.val.get())
             this.makeValueVisible()
         }
@@ -62,7 +57,7 @@ export class LinearSlider<S extends NotNull> {
     }
 
     public set valueRelative(v: number) {
-        if (this.val.setRelative(v, this.rounding)) {
+        if (this.val.setRelative(v)) {
             this.change.emit(this.val.get())
             this.makeValueVisible()
         }

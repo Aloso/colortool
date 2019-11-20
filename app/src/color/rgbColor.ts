@@ -10,15 +10,6 @@ export class RgbColor implements Color<RgbColor> {
     ) {
     }
 
-    public static from(r: number, g: number, b: number, a = 100): RgbColor {
-        return new RgbColor(
-            Math.max(0, Math.min(255, r)) | 0,
-            Math.max(0, Math.min(255, g)) | 0,
-            Math.max(0, Math.min(255, b)) | 0,
-            Math.max(0, Math.min(100, a)) | 0,
-        )
-    }
-
     public static fromHex(s: string): RgbColor | null {
         s = s.trim()
         if (s.length >= 4 && s[0] === '#') {
@@ -122,8 +113,4 @@ export class RgbColor implements Color<RgbColor> {
     public invert(): RgbColor {
         return new RgbColor(255 - this.r, 255 - this.g, 255 - this.b, this.a)
     }
-}
-
-export function isRgb(color: Color<any>): color is RgbColor {
-    return 'r' in color
 }

@@ -23,8 +23,7 @@ const space = (width: number = 5) => {
 
 const slider359Options: SliderOptions = {
     min: 0,
-    max: 359,
-    rounding: (n: number) => n | 0,
+    max: 359.999,
     step: 4,
     smallStep: 1,
     direction: Direction.Up,
@@ -62,16 +61,8 @@ function textHexInput(label: string, value: Color<any>): StringInput {
 }
 
 const circularCanvas = new Canvas(circleSize, circleSize, roundHueGradient(padding), undefined)
-const circularSlider = new CircularSlider(circularCanvas, {
-    min: 0,
-    max: 100,
-    rounding: (n: number) => n | 0,
-}, {
-    min: 0,
-    max: 360,
-    rounding: (n: number) => n | 0,
-    startAngle: 0,
-})
+const circularSlider = new CircularSlider(circularCanvas,
+    { min: 0, max: 100 }, { min: 0, max: 360, startAngle: 0 })
 
 
 let rgb = new RgbColor(255, 0, 0)
@@ -238,9 +229,7 @@ function invert() {
 hexInput.elem.className = 'small-input'
 hexInput.elem.style.fontFamily = '"Roboto Mono", Consolas, "Noto Mono", Hack, "Droid Sans Mono"'
 hexInput.input.on(s => {
-    console.log(s)
     const color = RgbColor.fromHex(s)
-    console.log(color)
     if (color != null) {
         rgb = color
         hsl = rgb.hsl

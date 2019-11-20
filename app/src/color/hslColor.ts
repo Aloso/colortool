@@ -10,32 +10,23 @@ export class HslColor implements Color<HslColor> {
     ) {
     }
 
-    public static from(hue: number, sat: number, lum: number, a = 100): HslColor {
-        return new HslColor(
-            Math.max(0, Math.min(359, hue)) | 0,
-            Math.max(0, Math.min(100, sat)) | 0,
-            Math.max(0, Math.min(100, lum)) | 0,
-            Math.max(0, Math.min(100, a)) | 0,
-        )
-    }
-
     public setHue(hue: number): HslColor {
-        const hueValid = Math.max(0, Math.min(359, hue)) | 0
+        const hueValid = Math.max(0, Math.min(360, hue % 360))
         return new HslColor(hueValid, this.sat, this.lum, this.a)
     }
 
     public setSat(sat: number): HslColor {
-        const satValid = Math.max(0, Math.min(100, sat)) | 0
+        const satValid = Math.max(0, Math.min(100, sat))
         return new HslColor(this.hue, satValid, this.lum, this.a)
     }
 
     public setLum(lum: number): HslColor {
-        const lumValid = Math.max(0, Math.min(100, lum)) | 0
+        const lumValid = Math.max(0, Math.min(100, lum))
         return new HslColor(this.hue, this.sat, lumValid, this.a)
     }
 
     public setA(a: number): HslColor {
-        const aValid = Math.max(0, Math.min(100, a)) | 0
+        const aValid = Math.max(0, Math.min(100, a))
         return new HslColor(this.hue, this.sat, this.lum, aValid)
     }
 
@@ -99,8 +90,4 @@ export class HslColor implements Color<HslColor> {
     public get hexWithAlpha(): string {
         return this.rgb.hexWithAlpha
     }
-}
-
-export function isHsl(color: Color<any>): color is HslColor {
-    return 'hue' in color
 }
