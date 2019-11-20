@@ -3,6 +3,7 @@ import { Canvas } from '../canvas/canvas'
 import { CircleInnerDir, CircleOuterDir } from '../util/dimensions'
 import { EventEmitter } from '../util/eventEmitter'
 import { Limit } from '../util/limit'
+import { supportsPassiveEvents } from '../util/browserSupport'
 
 export interface CircularInnerOptions {
     min: number
@@ -117,7 +118,7 @@ export class CircularSlider<S extends NotNull> {
                 // prevent scrolling while dragging
                 e.preventDefault()
             }
-        })
+        }, supportsPassiveEvents ? { passive: false } : false)
 
         window.addEventListener('mousemove', e => {
             if (isPressed) {
@@ -141,7 +142,7 @@ export class CircularSlider<S extends NotNull> {
             } else {
                 isPressed = false
             }
-        })
+        }, supportsPassiveEvents ? { passive: false } : false)
         window.addEventListener('mouseup', () => isPressed = false)
         window.addEventListener('touchend', () => isPressed = false)
         window.addEventListener('touchcancel', () => isPressed = false)

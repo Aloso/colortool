@@ -14,6 +14,7 @@ import { Palette } from './palette/palette'
 import { Toolbar } from './toolbar/toolbar'
 import { byId } from './toolbar/util'
 import { array } from './util/myTypes'
+import { supportsTouch } from './util/browserSupport'
 
 const space = (width: number = 5) => {
     const el = document.createElement('div')
@@ -182,16 +183,42 @@ alphaInput.input.on(v => {
 
 const hueIndices = [0, 1, 2, 3, 4, 5, 6]
 
+let movement = 0
+
 function updateSliders() {
-    hueInput.canvasState = hueIndices.map(i => hsl.setHue(i * 60).hex)
-    satInput.canvasState = [hsl.setSat(0).hex, hsl.setSat(100).hex]
-    lumInput.canvasState = ['#000', hsl.setLum(50).hex, '#fff']
+    movement += 1
 
-    redInput.canvasState = [rgb.setR(0).hex, rgb.setR(255).hex]
-    greenInput.canvasState = [rgb.setG(0).hex, rgb.setG(255).hex]
-    blueInput.canvasState = [rgb.setB(0).hex, rgb.setB(255).hex]
+    const hueC = hueIndices.map(i => hsl.setHue(i * 60).hex)
+    const satC = [hsl.setSat(0).hex, hsl.setSat(100).hex]
+    const lumC = ['#000', hsl.setLum(50).hex, '#fff']
 
-    alphaInput.canvasState = [rgb.setA(0).rgbaString, rgb.setA(100).rgbaString]
+    const redC = [rgb.setR(0).hex, rgb.setR(255).hex]
+    const greC = [rgb.setG(0).hex, rgb.setG(255).hex]
+    const bluC = [rgb.setB(0).hex, rgb.setB(255).hex]
+
+    const alpC = [rgb.setA(0).rgbaString, rgb.setA(100).rgbaString]
+
+    if (supportsTouch && (window as any).requestIdleCallback != null) {
+        const currentMovement = movement;
+        (window as any).requestIdleCallback(() => {
+            if (currentMovement !== movement) return
+            hueInput.canvasState = hueC
+            satInput.canvasState = satC
+            lumInput.canvasState = lumC
+            redInput.canvasState = redC
+            greenInput.canvasState = greC
+            blueInput.canvasState = bluC
+            alphaInput.canvasState = alpC
+        })
+    } else {
+        hueInput.canvasState = hueC
+        satInput.canvasState = satC
+        lumInput.canvasState = lumC
+        redInput.canvasState = redC
+        greenInput.canvasState = greC
+        blueInput.canvasState = bluC
+        alphaInput.canvasState = alpC
+    }
 
     hueInput.value = hsl.hue
     satInput.value = hsl.sat
