@@ -1,7 +1,6 @@
-import { Canvas } from './canvas/canvas'
-import { roundHueGradient } from './canvas/roundHue'
-import { linearGradient } from './canvas/linearGradientCanvas'
-import { LinearSlider, SliderOptions } from './input/linearSlider'
+import { Canvas } from './background/canvas'
+import { roundHueGradient } from './background/roundHue'
+import { SliderOptions } from './input/linearSlider'
 import { CircularSlider } from './input/circularSlider'
 import { SliderWithInput } from './input/sliderWithInput'
 import { StringInput } from './input/stringInput'
@@ -15,6 +14,8 @@ import { Toolbar } from './toolbar/toolbar'
 import { byId } from './toolbar/util'
 import { array } from './util/myTypes'
 import { supportsTouch } from './util/browserSupport'
+import { RawSlider } from './input/rawSlider'
+import { LinearGradientBackground } from './background/linearGradientBackground'
 
 const space = (width: number = 5) => {
     const el = document.createElement('div')
@@ -47,12 +48,13 @@ const sliderSize = isSmallScreen ? 200 : 299
 const circleSize = isSmallScreen ? 226 : 339
 const padding = isSmallScreen ? 10 : 15
 
-function upSliderCanvas(): Canvas<string[]> {
-    return new Canvas(30, sliderSize, linearGradient(Direction.Up), ['transparent', 'transparent'])
+function upSliderBg(): LinearGradientBackground<string[]> {
+    return new LinearGradientBackground(sliderSize, 30, Direction.Up, ['transparent'])
 }
 
 function upSliderInput(label: string, options: SliderOptions, transparent = false): SliderWithInput<string[]> {
-    const slider = new LinearSlider(upSliderCanvas(), options)
+    const slider = new RawSlider(upSliderBg(), options) // new LinearSlider(upSliderCanvas(), options)
+
     if (transparent) slider.elem.classList.add('transparent')
     return new SliderWithInput(slider, label)
 }
@@ -202,22 +204,22 @@ function updateSliders() {
         const currentMovement = movement;
         (window as any).requestIdleCallback(() => {
             if (currentMovement !== movement) return
-            hueInput.canvasState = hueC
-            satInput.canvasState = satC
-            lumInput.canvasState = lumC
-            redInput.canvasState = redC
-            greenInput.canvasState = greC
-            blueInput.canvasState = bluC
-            alphaInput.canvasState = alpC
+            hueInput.bgState = hueC
+            satInput.bgState = satC
+            lumInput.bgState = lumC
+            redInput.bgState = redC
+            greenInput.bgState = greC
+            blueInput.bgState = bluC
+            alphaInput.bgState = alpC
         })
     } else {
-        hueInput.canvasState = hueC
-        satInput.canvasState = satC
-        lumInput.canvasState = lumC
-        redInput.canvasState = redC
-        greenInput.canvasState = greC
-        blueInput.canvasState = bluC
-        alphaInput.canvasState = alpC
+        hueInput.bgState = hueC
+        satInput.bgState = satC
+        lumInput.bgState = lumC
+        redInput.bgState = redC
+        greenInput.bgState = greC
+        blueInput.bgState = bluC
+        alphaInput.bgState = alpC
     }
 
     hueInput.value = hsl.hue

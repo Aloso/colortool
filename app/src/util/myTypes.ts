@@ -8,3 +8,7 @@ export function array<T>(lower: number, upper: number, f: (index: number) => T):
     for (let i = lower; i <= upper; i++) arr[i] = f(i)
     return arr
 }
+
+export function error(msg: string) {
+    throw new Error(msg)
+}

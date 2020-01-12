@@ -140,6 +140,79 @@ button::-moz-focus-inner {
     height: 100%;
 }
 
+/************* FANCY RANGE *************/
+
+.fancy-range {
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    flex-grow: 1;
+    margin: 0;
+    padding: 5px;
+    border-radius: 1000px;
+    box-shadow: 0 0 3px #0005;
+    min-width: 60px;
+}
+
+.fancy-range:focus {
+    outline: none;
+}
+
+.fancy-range::-moz-focus-outer {
+    border: 0;
+}
+
+.fancy-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    border: 1px solid #0009;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 20px #fffa;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    transition:  border .15s;
+}
+
+.fancy-range::-moz-range-thumb {
+    box-sizing: border-box;
+    border: 1px solid #0009;
+    background-color: transparent;
+    box-shadow: inset 0 0 0 20px #fffa;
+    position: relative;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border-radius: 50%;
+    transition:  border .15s;
+}
+
+.fancy-range:hover::-webkit-slider-thumb,
+.fancy-range:active::-webkit-slider-thumb {
+    box-shadow: inset 0 0 0 20px #fffd;
+}
+
+.fancy-range:hover::-moz-range-thumb,
+.fancy-range:active::-moz-range-thumb {
+    box-shadow: inset 0 0 0 20px #fffd;
+}
+
+.fancy-range:focus::-webkit-slider-thumb {
+    border: 3px solid #0006;
+    outline: none;
+}
+
+.fancy-range:focus::-moz-range-thumb {
+    border: 3px solid #0006;
+    outline: none;
+}
+
+
 /************* SLIDER CANVAS *************/
 
 .slider canvas {
@@ -329,7 +402,8 @@ input[type=text], input[type=number] {
     font-family: inherit;
 }
 
-input:focus {
+input[type=number]:focus,
+input[type=text]:focus {
     padding-bottom: 0;
     border-bottom: 2px solid #33b5ff;
     outline: none;

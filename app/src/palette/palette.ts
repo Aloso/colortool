@@ -1,5 +1,5 @@
 import { PaletteCell } from './paletteCell'
-import { EventEmitter } from '../util/eventEmitter'
+import { EventEmitter } from '../util/eventRouting'
 
 /**
  * A rectangular palette that fills in rows from top left to bottom right, e.g.

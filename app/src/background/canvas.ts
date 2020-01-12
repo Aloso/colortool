@@ -1,7 +1,8 @@
 import { NotNull } from '../util/myTypes'
-import { EventEmitter } from '../util/eventEmitter'
+import { EventEmitter } from '../util/eventRouting'
+import { Background } from './background'
 
-export type RenderFunction<S extends NotNull> = (canvas: Canvas<S>, state: S) => Promise<void>
+export type RenderFunction<S> = (canvas: Canvas<S>, state: S) => Promise<void>
 
 enum CanvasState {
     Idle,
@@ -10,7 +11,7 @@ enum CanvasState {
     Dirty,
 }
 
-export class Canvas<S extends NotNull> {
+export class Canvas<S extends NotNull> implements Background<S> {
     public readonly elem = document.createElement('canvas') as HTMLCanvasElement
     public readonly ctx = this.elem.getContext('2d') as CanvasRenderingContext2D
 
@@ -70,7 +71,7 @@ export class Canvas<S extends NotNull> {
         if (this.canvasState === CanvasState.Idle) {
             this.canvasState = CanvasState.Rendering
 
-            this.renderer(this, this._state).then(() => {
+            this.renderer(this, this.state).then(() => {
                 const prev = this.canvasState
                 this.canvasState = CanvasState.Idle
                 this.rendered.emit()

@@ -1,5 +1,5 @@
 import { Color } from '../color/color'
-import { EventEmitter } from '../util/eventEmitter'
+import { EventEmitter } from '../util/eventRouting'
 import { RgbColor } from '../color/rgbColor'
 
 export class PaletteCell {

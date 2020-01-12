@@ -1,9 +1,10 @@
 import { NotNull } from '../util/myTypes'
-import { EventEmitter } from '../util/eventEmitter'
-import { Canvas } from '../canvas/canvas'
+import { EventEmitter } from '../util/eventRouting'
 import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/dimensions'
 import { Limit } from '../util/limit'
 import { supportsPassiveEvents } from '../util/browserSupport'
+import { NumericSlider } from './sliderWithInput'
+import { Canvas } from '../background/canvas'
 
 export interface SliderOptions {
     min: number,
@@ -14,7 +15,7 @@ export interface SliderOptions {
     direction?: Direction,
 }
 
-export class LinearSlider<S extends NotNull> {
+export class LinearSlider<S extends NotNull> implements NumericSlider<S> {
     private readonly val: Limit
 
     public readonly step: number
@@ -28,7 +29,7 @@ export class LinearSlider<S extends NotNull> {
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
 
-    constructor(public readonly canvas: Canvas<S>, options: SliderOptions) {
+    constructor(public readonly background: Canvas<S>, options: SliderOptions) {
         if (options.initial == null) options.initial = options.min
         this.val = Limit.fromErr(options.initial, options.min, options.max)
 
@@ -76,7 +77,7 @@ export class LinearSlider<S extends NotNull> {
         const dir = this.isVertical ? 'v' : 'h'
 
         this.elem.className = `slider ${dir}-slider`
-        this.elem.appendChild(this.canvas.elem)
+        this.elem.appendChild(this.background.elem)
 
         const inner = document.createElement('div')
         inner.className = `slider-inner ${dir}-slider-inner`

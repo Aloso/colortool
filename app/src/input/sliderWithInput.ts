@@ -1,7 +1,18 @@
 import { NotNull } from '../util/myTypes'
-import { LinearSlider } from './linearSlider'
-import { EventEmitter } from '../util/eventEmitter'
+import { EventEmitter, Input } from '../util/eventRouting'
 import { nextUid } from '../util/uid'
+import { Background } from '../background/background'
+
+export interface NumericSlider<S extends NotNull> {
+    value: number
+    elem: HTMLElement
+    background: Background<S>
+    input: Input<number>
+    change: Input<number>
+    isVertical: boolean
+    min: number
+    max: number
+}
 
 export class SliderWithInput<S extends NotNull> {
     public readonly elem = document.createElement('div')
@@ -11,7 +22,7 @@ export class SliderWithInput<S extends NotNull> {
     public readonly input = new EventEmitter<number>()
     public readonly change = new EventEmitter<number>()
 
-    constructor(public readonly slider: LinearSlider<S>, label: string) {
+    constructor(public readonly slider: NumericSlider<S>, label: string) {
         this.initLabel(label)
         this.initElement()
         this.initNumber(label)
@@ -22,8 +33,8 @@ export class SliderWithInput<S extends NotNull> {
         this.slider.value = v
     }
 
-    public set canvasState(s: S) {
-        this.slider.canvas.state = s
+    public set bgState(s: S) {
+        this.slider.background.state = s
     }
 
     private initLabel(l: string) {

@@ -1,7 +1,7 @@
 import { NotNull } from '../util/myTypes'
-import { Canvas } from '../canvas/canvas'
+import { Canvas } from '../background/canvas'
 import { CircleInnerDir, CircleOuterDir } from '../util/dimensions'
-import { EventEmitter } from '../util/eventEmitter'
+import { EventEmitter } from '../util/eventRouting'
 import { Limit } from '../util/limit'
 import { supportsPassiveEvents } from '../util/browserSupport'
 

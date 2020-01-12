@@ -1,4 +1,4 @@
-import { EventEmitter } from '../util/eventEmitter'
+import { EventEmitter } from '../util/eventRouting'
 
 export class StringInput {
     public readonly elem = document.createElement('input')
