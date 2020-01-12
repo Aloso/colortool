@@ -48,12 +48,12 @@ const sliderSize = isSmallScreen ? 200 : 299
 const circleSize = isSmallScreen ? 226 : 339
 const padding = isSmallScreen ? 10 : 15
 
-function upSliderBg(): LinearGradientBackground<string[]> {
+function upSliderBg(): LinearGradientBackground {
     return new LinearGradientBackground(sliderSize, 30, Direction.Up, ['transparent'])
 }
 
 function upSliderInput(label: string, options: SliderOptions, transparent = false): SliderWithInput<string[]> {
-    const slider = new RawSlider(upSliderBg(), options) // new LinearSlider(upSliderCanvas(), options)
+    const slider = new RawSlider(upSliderBg(), options)
 
     if (transparent) slider.elem.classList.add('transparent')
     return new SliderWithInput(slider, label)

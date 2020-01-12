@@ -80,6 +80,7 @@ button::-moz-focus-inner {
 #cp-circle, #cp-slider, #cp-palette {
     display: flex;
     justify-content: center;
+    min-height: 250px;
 }
 
 #cp-circle-inner {
@@ -153,7 +154,7 @@ button::-moz-focus-inner {
     padding: 5px;
     border-radius: 1000px;
     box-shadow: 0 0 3px #0005;
-    min-width: 60px;
+    min-width: 100px;
 }
 
 .fancy-range:focus {
