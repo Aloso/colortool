@@ -55,6 +55,8 @@ export class RawSlider<S extends NotNull> implements NumericSlider<S> {
             this.change.emit(this.val.get())
         })
 
+        // TODO support other directions as well
+        // TODO don't hard-code width
         this.elem.style.width = '30px'
         setTimeout(() => {
             el.style.width = this.elem.clientHeight + 'px'

@@ -146,6 +146,7 @@ button::-moz-focus-inner {
 .fancy-range {
     box-sizing: border-box;
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     width: 30px;
     height: 30px;
@@ -167,6 +168,7 @@ button::-moz-focus-inner {
 
 .fancy-range::-webkit-slider-thumb {
     -webkit-appearance: none;
+    -moz-appearance: none;
     appearance: none;
     box-sizing: border-box;
     border: 1px solid #0009;
