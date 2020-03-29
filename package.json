@@ -27,10 +27,10 @@
     "mousetrap": "^1.6.5"
   },
   "devDependencies": {
-    "ts-loader": "^6.2.1",
+    "ts-loader": "^6.2.2",
     "tslint": "^6.1.0",
     "typescript": "^3.8.3",
-    "webpack": "^4.42.0",
+    "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   }
