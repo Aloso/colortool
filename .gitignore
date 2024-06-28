@@ -1,5 +1,5 @@
 .idea/
 colortool.iml
 node_modules/
-app/public/
+dist/
 /.directory
