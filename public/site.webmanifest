@@ -1,6 +1,5 @@
 {
-    "name": "ColorTool",
-    "short_name": "ColorTool",
+    "name": "Color Picker",
     "icons": [
         {
             "src": "android-chrome-192x192.png",

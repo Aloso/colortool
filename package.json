@@ -2,6 +2,7 @@
   "name": "colortool",
   "version": "1.0.0",
   "description": "Color management tool",
+  "private": true,
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,16 +12,8 @@
     "type": "git",
     "url": "git+https://github.com/Aloso/colortool.git"
   },
-  "keywords": [
-    "color",
-    "css"
-  ],
   "author": "Ludwig Stecher <ludwig.stecher@gmx.de>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/Aloso/colortool/issues"
-  },
-  "homepage": "https://github.com/Aloso/colortool#readme",
   "type": "module",
   "dependencies": {
     "mousetrap": "^1.6.5"
