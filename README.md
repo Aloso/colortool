@@ -1,4 +1,4 @@
-# ColorTool
+# Color Picker
 
 This is a powerful, yet beautiful and easy-to-use color management tool.
 
