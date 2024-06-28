@@ -2,10 +2,10 @@
   "name": "colortool",
   "version": "1.0.0",
   "description": "Color management tool",
-  "main": "index.js",
   "scripts": {
-    "start": "webpack --watch",
-    "serve": "webpack-dev-server"
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -21,17 +21,16 @@
     "url": "https://github.com/Aloso/colortool/issues"
   },
   "homepage": "https://github.com/Aloso/colortool#readme",
-  "module": "app",
+  "type": "module",
   "dependencies": {
-    "@types/mousetrap": "^1.6.3",
     "mousetrap": "^1.6.5"
   },
   "devDependencies": {
-    "ts-loader": "^6.2.2",
-    "tslint": "^6.1.0",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.3"
+    "@types/mousetrap": "^1.6.15",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.2"
   }
 }

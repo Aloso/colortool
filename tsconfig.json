@@ -1,23 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["es5", "es6", "dom"],
-    "target": "es5",
-    "outDir": "./out",
+    "lib": ["esnext", "dom"],
+    "target": "es2020",
     "module": "es6",
     "allowJs": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "sourceMap": true
+    "strict": true
   },
-  "awesomeTypescriptLoaderOptions": {
-    "useCache": true
-  },
-  "include": [
-    "app/src/index.ts"
-  ]
+  "include": ["src"]
 }
