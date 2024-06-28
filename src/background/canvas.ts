@@ -53,8 +53,8 @@ export class Canvas<S extends NotNull> implements Background<S> {
         const w = this._width
         const h = this._height
 
-        this.elem.width = Math.round(w / dpr)
-        this.elem.height = Math.round(h / dpr)
+        this.elem.width = Math.round(w * dpr)
+        this.elem.height = Math.round(h * dpr)
     }
 
     public set state(s: S) {

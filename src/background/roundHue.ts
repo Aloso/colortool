@@ -43,7 +43,7 @@ export function roundHueGradient(padding: number): RenderFunction<void> {
         if (w !== h) throw new Error(`Canvas isn't square: ${w}x${h}`)
 
         const img = canvas.ctx.getImageData(0, 0, w, w)
-        drawImageLazily(img.data, w, padding)
+        drawImageLazily(img.data, w, padding * devicePixelRatio)
 
         return new Promise(resolve =>
             setTimeout(() => {

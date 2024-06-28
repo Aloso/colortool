@@ -2,7 +2,6 @@ import { NotNull } from '../util/myTypes'
 import { EventEmitter } from '../util/eventRouting'
 import { Direction, getSignForSliderKeypress, keyToDirection } from '../util/dimensions'
 import { Limit } from '../util/limit'
-import { supportsPassiveEvents } from '../util/browserSupport'
 import { NumericSlider } from './sliderWithInput'
 import { Canvas } from '../background/canvas'
 
@@ -114,7 +113,7 @@ export class LinearSlider<S extends NotNull> implements NumericSlider<S> {
                     e.preventDefault()
                 }
             },
-            supportsPassiveEvents ? { passive: false } : false,
+            { passive: false },
         )
 
         let isKeydown = false
@@ -154,7 +153,7 @@ export class LinearSlider<S extends NotNull> implements NumericSlider<S> {
                     isPressed = false
                 }
             },
-            supportsPassiveEvents ? { passive: false } : false,
+            { passive: false },
         )
         window.addEventListener('mouseup', () => (isPressed = false))
         window.addEventListener('touchend', () => (isPressed = false))

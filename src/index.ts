@@ -13,7 +13,6 @@ import { Palette } from './palette/palette'
 import { Toolbar } from './toolbar/toolbar'
 import { byId } from './toolbar/util'
 import { array } from './util/myTypes'
-import { supportsTouch } from './util/browserSupport'
 import { RawSlider } from './input/rawSlider'
 import { LinearGradientBackground } from './background/linearGradientBackground'
 
@@ -182,11 +181,7 @@ alphaInput.input.on(v => {
 
 const hueIndices = [0, 1, 2, 3, 4, 5, 6]
 
-let movement = 0
-
 function updateSliders() {
-    movement += 1
-
     const hueC = hueIndices.map(i => hsl.setHue(i * 60).hex)
     const satC = [hsl.setSat(0).hex, hsl.setSat(100).hex]
     const lumC = ['#000', hsl.setLum(50).hex, '#fff']
@@ -197,27 +192,13 @@ function updateSliders() {
 
     const alpC = [rgb.setA(0).rgbaString, rgb.setA(100).rgbaString]
 
-    if (supportsTouch && window.requestIdleCallback != null) {
-        const currentMovement = movement
-        window.requestIdleCallback(() => {
-            if (currentMovement !== movement) return
-            hueInput.bgState = hueC
-            satInput.bgState = satC
-            lumInput.bgState = lumC
-            redInput.bgState = redC
-            greenInput.bgState = greC
-            blueInput.bgState = bluC
-            alphaInput.bgState = alpC
-        })
-    } else {
-        hueInput.bgState = hueC
-        satInput.bgState = satC
-        lumInput.bgState = lumC
-        redInput.bgState = redC
-        greenInput.bgState = greC
-        blueInput.bgState = bluC
-        alphaInput.bgState = alpC
-    }
+    hueInput.bgState = hueC
+    satInput.bgState = satC
+    lumInput.bgState = lumC
+    redInput.bgState = redC
+    greenInput.bgState = greC
+    blueInput.bgState = bluC
+    alphaInput.bgState = alpC
 
     hueInput.value = hsl.hue
     satInput.value = hsl.sat
