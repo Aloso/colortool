@@ -19,7 +19,10 @@ export class RawSlider<S extends NotNull> implements NumericSlider<S> {
 
     public readonly elem = document.createElement('div')
 
-    public constructor(public readonly background: Background<S>, options: SliderOptions) {
+    public constructor(
+        public readonly background: Background<S>,
+        options: SliderOptions,
+    ) {
         if (options.initial == null) options.initial = options.min
         this.val = Limit.fromErr(options.initial, options.min, options.max)
 

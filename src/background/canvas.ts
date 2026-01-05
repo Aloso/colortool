@@ -22,7 +22,12 @@ export class Canvas<S extends NotNull> implements Background<S> {
 
     private canvasState = CanvasState.Idle
 
-    constructor(private _width: number, private _height: number, public renderer: RenderFunction<S>, state: S) {
+    constructor(
+        private _width: number,
+        private _height: number,
+        public renderer: RenderFunction<S>,
+        state: S,
+    ) {
         this._state = state
 
         this.updateSize()

@@ -28,7 +28,10 @@ export class LinearSlider<S extends NotNull> implements NumericSlider<S> {
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
 
-    constructor(public readonly background: Canvas<S>, options: SliderOptions) {
+    constructor(
+        public readonly background: Canvas<S>,
+        options: SliderOptions,
+    ) {
         if (options.initial == null) options.initial = options.min
         this.val = Limit.fromErr(options.initial, options.min, options.max)
 

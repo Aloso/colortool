@@ -39,7 +39,11 @@ export class CircularSlider<S extends NotNull> {
     public readonly elem = document.createElement('div')
     private readonly handle = document.createElement('button')
 
-    constructor(private canvas: Canvas<S>, inner: CircularInnerOptions, outer: CircularOuterOptions) {
+    constructor(
+        private canvas: Canvas<S>,
+        inner: CircularInnerOptions,
+        outer: CircularOuterOptions,
+    ) {
         if (inner.initial == null) inner.initial = inner.min
         if (outer.initial == null) outer.initial = outer.min
 

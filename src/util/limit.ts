@@ -10,7 +10,11 @@
  * ```
  */
 export class Limit {
-    private constructor(private val: number, public readonly min: number, public readonly max: number) {}
+    private constructor(
+        private val: number,
+        public readonly min: number,
+        public readonly max: number,
+    ) {}
 
     /**
      * Create a limited number. Adjusts the number if necessary

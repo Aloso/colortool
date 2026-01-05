@@ -32,7 +32,10 @@ export class MenuItem implements MenuComponent {
 
     private isInitialized = false
 
-    constructor(public parent: ItemContainer, options: MenuItemOptions) {
+    constructor(
+        public parent: ItemContainer,
+        options: MenuItemOptions,
+    ) {
         this.label = options.label
         this.action = options.action ?? null
         this.disabled = options.disabled === true

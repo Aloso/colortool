@@ -1,29 +1,30 @@
 {
-  "name": "colortool",
-  "version": "1.0.0",
-  "description": "Color management tool",
-  "private": true,
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Aloso/colortool.git"
-  },
-  "author": "Ludwig Stecher <ludwig.stecher@gmx.de>",
-  "license": "MIT",
-  "type": "module",
-  "dependencies": {
-    "mousetrap": "^1.6.5"
-  },
-  "devDependencies": {
-    "@types/mousetrap": "^1.6.15",
-    "@typescript-eslint/eslint-plugin": "^7.14.1",
-    "@typescript-eslint/parser": "^7.14.1",
-    "eslint": "^8.57.0",
-    "typescript": "^5.5.2",
-    "vite": "^5.4.21"
-  }
+    "name": "colortool",
+    "version": "1.0.0",
+    "private": true,
+    "description": "Color management tool",
+    "license": "MIT",
+    "author": "Ludwig Stecher <ludwig.stecher@gmx.de>",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Aloso/colortool.git"
+    },
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix",
+        "fmt": "oxfmt"
+    },
+    "dependencies": {
+        "mousetrap": "^1.6.5"
+    },
+    "devDependencies": {
+        "@types/mousetrap": "^1.6.15",
+        "oxfmt": "^0.22.0",
+        "oxlint": "^1.37.0",
+        "typescript": "^5.9.3",
+        "vite": "^7.3.0"
+    }
 }

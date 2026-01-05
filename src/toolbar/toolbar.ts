@@ -102,7 +102,8 @@ export class Toolbar implements ItemContainer {
 
     public pressEscape() {
         const leaf = this.leaf()
-        leaf instanceof MenuItem ? leaf.parent.hide() : leaf.hide()
+        if (leaf instanceof MenuItem) leaf.parent.hide()
+        else leaf.hide()
     }
 
     public pressArrow(key: 'ArrowUp' | 'ArrowDown' | 'ArrowLeft' | 'ArrowRight') {

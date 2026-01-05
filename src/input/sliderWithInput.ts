@@ -22,7 +22,10 @@ export class SliderWithInput<S extends NotNull> {
     public readonly input = new EventEmitter<number>()
     public readonly change = new EventEmitter<number>()
 
-    constructor(public readonly slider: NumericSlider<S>, label: string) {
+    constructor(
+        public readonly slider: NumericSlider<S>,
+        label: string,
+    ) {
         this.initLabel(label)
         this.initElement()
         this.initNumber(label)

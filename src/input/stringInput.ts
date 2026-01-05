@@ -7,7 +7,10 @@ export class StringInput {
     public readonly change = new EventEmitter<string>()
     public readonly input = new EventEmitter<string>()
 
-    constructor(label: string, private val: string) {
+    constructor(
+        label: string,
+        private val: string,
+    ) {
         this.elem.value = val
         this.label.innerHTML = label
         this.initElement()

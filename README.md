@@ -4,10 +4,10 @@ This is a powerful, yet beautiful and easy-to-use color management tool.
 
 It already supports:
 
--   A color circle to adjust hue and saturation
--   Sliders to adjust hue, saturation, luminance, red, green, blue and alpha
--   A nice color palette to choose from
--   An input for the hexadecimal representation (`#RRGGBB`, `#RRGGBBAA`)
+- A color circle to adjust hue and saturation
+- Sliders to adjust hue, saturation, luminance, red, green, blue and alpha
+- A nice color palette to choose from
+- An input for the hexadecimal representation (`#RRGGBB`, `#RRGGBBAA`)
 
 ![Preview](/docs/website-preview.png)
 
@@ -21,12 +21,12 @@ It already supports:
 
 ## Planned features
 
--   HSV color palette
--   Create your own palette
--   Download your palette/share it via link
--   Batch transformation: Manipulate colors within a text
--   Change background color
--   An area with text, to try out different text/background colors
+- HSV color palette
+- Create your own palette
+- Download your palette/share it via link
+- Batch transformation: Manipulate colors within a text
+- Change background color
+- An area with text, to try out different text/background colors
 
 ## Contributing
 
